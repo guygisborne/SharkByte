@@ -3,8 +3,8 @@ import socket
 import sys
 
 PROJECT_DIR = os.path.dirname(__file__)
-PROJECT_NAME = 'SharkByte'
-STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, 'static')
+PROJECT_NAME = 'kitchen'
+STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, "static")
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG                               
@@ -57,7 +57,7 @@ USE_L10N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 if LOCAL:
-	MEDIA_ROOT = os.path.join(PROJECT_DIR, 'static')
+	MEDIA_ROOT = os.path.join(PROJECT_DIR, "../site_media")
 else:
 	MEDIA_ROOT = ""
 	
@@ -65,7 +65,7 @@ else:
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 if LOCAL:
-	MEDIA_URL = 'http://localhost:8000/static/'
+	MEDIA_URL = 'http://localhost:8000/site_media/'
 else:
 	MEDIA_URL = ''
 	
@@ -103,12 +103,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.contrib.messages.context_processors.messages",
 )
 
-ROOT_URLCONF = PROJECT_NAME + '.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
-	os.path.join(PROJECT_DIR, 'templates'),
-	os.path.join(PROJECT_DIR, 'templates/employee'),
-	os.path.join(PROJECT_DIR, 'templates/menu'),
+	os.path.join(PROJECT_DIR, "templates"),
+	os.path.join(PROJECT_DIR, "templates/menu"),
 )
 
 INSTALLED_APPS = (
@@ -120,6 +119,5 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.admindocs',
 	'django.contrib.markup',
-	PROJECT_NAME + '.employee',
-	PROJECT_NAME + '.menu',
+	'employee',
 )
