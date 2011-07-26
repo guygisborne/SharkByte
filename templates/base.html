@@ -3,15 +3,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
         <title>SharkByte {% block title %}- Grooveshark Food Ordering{% endblock %}</title>
-        <link rel="stylesheet" href="/site_media/stylesheets/style.css" type="text/css"/>
+        <link rel="stylesheet" href="/static/stylesheets/reset.css" type="text/css"/>
+        <link rel="stylesheet" href="/static/stylesheets/style.css" type="text/css"/>
     </head>
 
     <body>                 
-        <div id="content" class="con">
+        <div id="content">
             {% block main %}{% endblock %}
         </div>
     </body>
 
-    <script type="text/javascript" src="/site_media/javascripts/jquery.js"></script>
-    <script type="text/javascript" src="/site_media/javascripts/main.js"></script>
+    <script type="text/javascript" src="/static/javascripts/jquery.js"></script>
+    <script type="text/javascript" src="/static/javascripts/main.js"></script>
 </html>

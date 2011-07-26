@@ -4,7 +4,7 @@ import sys
 
 PROJECT_DIR = os.path.dirname(__file__)
 PROJECT_NAME = 'SharkByte'
-STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, "static")
+STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG                               
@@ -57,7 +57,7 @@ USE_L10N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 if LOCAL:
-	MEDIA_ROOT = os.path.join(PROJECT_DIR, "../site_media")
+	MEDIA_ROOT = os.path.join(PROJECT_DIR, 'static')
 else:
 	MEDIA_ROOT = ""
 	
@@ -65,7 +65,7 @@ else:
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 if LOCAL:
-	MEDIA_URL = 'http://localhost:8000/site_media/'
+	MEDIA_URL = 'http://localhost:8000/static/'
 else:
 	MEDIA_URL = ''
 	

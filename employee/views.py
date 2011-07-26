@@ -1,9 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from django.core.urlresolvers import reverse
 from django.template import RequestContext
-from django.contrib.auth.models import User
-from django.contrib import auth
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 from forms import *
 from models import *
