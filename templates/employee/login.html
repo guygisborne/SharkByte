@@ -2,7 +2,7 @@
 
 {% block main %}
 
-<form method="post" class="formwrap" action="{% url kitchen.employee.views.authenticate %}">
+<form method="post" class="formwrap" action="{% url employee.views.authenticate %}">
     {% csrf_token %}   
     <p>
         <label for="id_username">Username <span class="errors">{% for error in login_form.username.errors %} {{ error }} {% endfor %}</span></label>

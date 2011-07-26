@@ -3,7 +3,7 @@ import socket
 import sys
 
 PROJECT_DIR = os.path.dirname(__file__)
-PROJECT_NAME = 'kitchen'
+PROJECT_NAME = 'SharkByte'
 STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, "static")
 
 DEBUG = True
