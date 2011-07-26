@@ -1,0 +1,10 @@
+*~
+\#*#
+.#*
+database.db
+*.pyc
+*.tmproj
+tmtags
+.DS_Store
+*.swp
+*/migrations/
