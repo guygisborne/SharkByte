@@ -1,7 +1,12 @@
 from menu.models import MealForm, Meal
 
-from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response, get_object_or_404
+from django.core.urlresolvers import reverse
+from django.contrib import auth
+
+
+
 
 def test(request):
     """docstring for test"""
@@ -15,4 +20,7 @@ def createMeal(request):
 
 def createMenu():
     pass
-    
+
+
+def order(request):
+    return render_to_response('order.html', {}, context_instanceext_instance=RequestContext(request))
