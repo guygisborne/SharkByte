@@ -37,10 +37,16 @@ def logout(request):
 	return HttpResponseRedirect(reverse('login'))
 
 def editProfile(request):
-	if 'employeeID' in request.session:
-		employee = get_object_or_404(Employee, pk=request.session['employeeID'])
-		employee_form = EditEmployeeForm(instance=employee)
-		return render_to_response('edit_profile.html', { 'employee_form': employee_form }, context_instance=RequestContext(request))
-	else:
+	if 'employeeID' not in request.session:
 		return HttpResponseRedirect(reverse('login'))
+
+	employee = get_object_or_404(Employee, pk=request.session['employeeID'])
+	if request.method == 'POST':
+		employee_form = EditEmployeeForm(request.POST, instance=employee)
+		if employee_form.is_valid():
+			employee_form.save()
+	else:
+		employee_form = EditEmployeeForm(instance=employee)
+
+	return render_to_response('edit_profile.html', { 'employee_form': employee_form }, context_instance=RequestContext(request))
 

@@ -1,12 +1,12 @@
 @import url(http://fonts.googleapis.com/css?family=Rokkitt);
-body { background:#eee; font:normal 0.625em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; }
+body { background:#eee; font:normal 0.625em/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
 #container { background:#fff; margin:20px auto 0 auto; -moz-border-radius:5px; -webkit-border-radius:5px; }
     #container.small { width:375px; }
     #container.medium { width:600px; }
     #container.large { width:900px; }
 
-#header { border-bottom:2px dashed #eee; padding:12px 20px; }
+#header { padding:12px 20px; border-bottom:2px dashed #eee; }
     #logo { font:normal 2.2em/1em Rokkitt, inherit; letter-spacing:1px; }
     #nav { float:right; color:#bcbcbc; }
         #nav li { display:inline; }
@@ -14,17 +14,16 @@ body { background:#eee; font:normal 0.625em/1.5em 'Trebuchet MS', Helvetica, 'He
         #nav a:hover { color:#6a8e80; }
 
 #content { padding:12px 20px; }
-    #content h2 { }
+    #content h2 { font:bold 1.6em/1em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; margin-bottom:10px; }
 
 form { }
-    p { margin-bottom:10px; }
-    label { display:block; margin-bottom:2px; font-size:1em; color:#888; }
-    label span { color:#DF1B1B; float:right; }
+    p { display:inline-block; margin-bottom:10px; }
+    label { display:block; margin-bottom:4px; font-size:1.2em; color:#666; }
+    label span.help_text { display:block; color:#888; margin-top:2px; }
+    label span.errors { float:right; color:#DF1B1B; }
     input, textarea { border:1px solid #b3b3b3; padding:8px; font:normal 1em "Helvetica Neue", Helvetica, Arial, sans-serif; }
-    input { width:200px; font-size:1.4em; }
-    textarea { width:200px; line-height:1.57em; }
-
-form.login input { width:319px; }
+    input { width:319px; font-size:1.4em; }
+    textarea { width:400px; line-height:1.57em; }
 
 /*
  * Button styles ripped from http://www.m.grooveshark.com

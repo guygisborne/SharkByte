@@ -15,9 +15,9 @@
                 <div id="nav" class="right">
                     {% block navigation %}
                     <ul>
-                        <li><a href="">Order</a></li>
-                        <li><a href="">Profile</a></li>
-                        <li><a href="">Logout</a></li>
+                        <li><a href="{% url menu.views.order %}">Order</a></li>
+                        <li><a href="{% url employee.views.editProfile %}">Profile</a></li>
+                        <li><a href="{% url employee.views.logout %}">Logout</a></li>
                     </ul>
                     {% endblock %}
                 </div>

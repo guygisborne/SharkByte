@@ -1,6 +1,6 @@
 {% extends "base.html" %}    
 
-{% block title %}- Editting Profile{% endblock %}
+{% block title %}- Editing Profile{% endblock %}
 {% block size %}medium{% endblock %}
 
 {% block content %}
@@ -10,8 +10,20 @@
     <form method="post" class="profile" action="{% url employee.views.editProfile %}">
         {% csrf_token %}   
         <p>
-            <label for="id_display_name">Display Name <span class="errors">{% for error in employee_form.display_name.errors %} {{ error }} {% endfor %}</span></label>
+            <label for="id_display_name">Display Name <span class="help_text">{{ employee_form.display_name.help_text }}</span></label>
             {{ employee_form.display_name }}
+        </p>
+        <p>
+            <label for="id_allergies">List of Allergies <span class="errors">{% for error in employee_form.allergies.errors %} {{ error }} {% endfor %}</span></label>
+            {{ employee_form.allergies }}
+        </p>
+        <p>
+            <label for="id_card_number">Card Number <span class="errors">{% for error in employee_form.card_number.errors %} {{ error }} {% endfor %}</span></label>
+            {{ employee_form.card_number }}
+        </p>
+        <p>
+            <label for="id_diet">Dietary Restrictions <span class="errors">{% for error in employee_form.diet.errors %} {{ error }} {% endfor %}</span></label>
+            {{ employee_form.diet }}
         </p>
         <div class="buttons">
             <button type="submit" name="" value="" class="green thinandtall">
