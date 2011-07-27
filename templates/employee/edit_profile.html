@@ -1,0 +1,23 @@
+{% extends "base.html" %}    
+
+{% block title %}- Editting Profile{% endblock %}
+{% block size %}medium{% endblock %}
+
+{% block content %}
+
+    <h2>Editing Profile</h2>
+
+    <form method="post" class="profile" action="{% url employee.views.editProfile %}">
+        {% csrf_token %}   
+        <p>
+            <label for="id_display_name">Display Name <span class="errors">{% for error in employee_form.display_name.errors %} {{ error }} {% endfor %}</span></label>
+            {{ employee_form.display_name }}
+        </p>
+        <div class="buttons">
+            <button type="submit" name="" value="" class="green thinandtall">
+                <div><span>Save Changes</span></div>
+            </button>
+        </div>
+    </form>
+    
+{% endblock %}

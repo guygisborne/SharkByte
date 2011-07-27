@@ -1,18 +1,26 @@
 {% extends "base.html" %}    
 
-{% block main %}
+{% block title %}- Login to Order{% endblock %}
+{% block size %}small{% endblock %}
+{% block navigation %}Login{% endblock %}
 
-<form method="post" class="formwrap" action="{% url employee.views.authenticate %}">
-    {% csrf_token %}   
-    <p>
-        <label for="id_username">Username <span class="errors">{% for error in login_form.username.errors %} {{ error }} {% endfor %}</span></label>
-        {{ login_form.username }}
-    </p>
-    <p>
-        <label for="id_password">Password <span class="errors">{% for error in login_form.password.errors %} {{ error }} {% endfor %}</span></label>
-        {{ login_form.password }}
-    </p>
-    <p><input type="submit" class="btn" value="Login" /></p>
-</form>
+{% block content %}
+
+    <form method="post" class="login" action="{% url employee.views.authenticate %}">
+        {% csrf_token %}   
+        <p>
+            <label for="id_username">Username <span class="errors">{% for error in login_form.username.errors %} {{ error }} {% endfor %}</span></label>
+            {{ login_form.username }}
+        </p>
+        <p>
+            <label for="id_password">Password <span class="errors">{% for error in login_form.password.errors %} {{ error }} {% endfor %}</span></label>
+            {{ login_form.password }}
+        </p>
+        <div class="buttons">
+            <button type="submit" name="" value="" class="green thinandtall">
+                <div><span>Login</span></div>
+            </button>
+        </div>
+    </form>
 
 {% endblock %}
