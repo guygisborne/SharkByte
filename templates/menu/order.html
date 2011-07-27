@@ -73,3 +73,76 @@
 </div>
 
 {% endblock %}
+<!--
+<style type="text/css">
+
+#content {
+    position: relative;
+    margin: 10px 110px 30px 110px;
+    min-height: 600px;
+    min-width: 300px;
+    border: 1px solid #CCC;
+    background: white;
+}
+
+.meals {
+    text-align: center;
+}
+
+</style>
+
+
+<html>
+{% if mess %}
+<h1>
+You ordered: {{ mess }}
+</h1>
+{% endif %}
+
+<div id="content">
+<div id="breakfast" class="meals">
+   <h2> This is what's for breakfast: {{ breakfast.name }} </h2> 
+   <p>
+   {{ breakfast.description }}
+   </p>
+    
+</div>
+
+<div id="lunch" class="meals">
+   <h2> This is what's for lunch: {{ lunch.name }} </h2> 
+   <p>
+   {{ lunch.description }}
+   </p>
+    
+</div>
+<br />
+
+<div id="dinner" class="meals">
+   <h2> Here are the dinner options:</h2> 
+   <br>
+   <form action="{% url menu.views.menuForToday %}" method="post" accept-charset="utf-8"> {% csrf_token %}
+
+
+       
+   
+   
+    {% for dinner in dinners %}
+       <h3>
+           {{ dinner.name }}
+       </h3>
+      <input type="radio" name="dinner" value=" {{ dinner.id }} "/> {{ dinner.description }} <br />
+    {% endfor %}
+   <p><input type="submit" value="Continue &rarr;"0></p>
+   </form>
+   <p>
+   {{ dinner.description }}
+   {{ dinner.id }}
+   </p>
+
+
+    
+</div>
+</div>
+
+</html>
+-->

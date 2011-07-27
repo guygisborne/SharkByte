@@ -9,7 +9,10 @@ urlpatterns = patterns('',
 		       (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 		       (r'^admin/', include(admin.site.urls)),
 
-		       (r'^order/', 'menu.views.test'),
+		       (r'^order/', 'employee.views.menuForToday'),
+		       (r'^createMeal/', 'menu.views.createMeal'),
+		       (r'^createMenu/', 'menu.views.createMenu'),
+
 
 		       #(r'^', include('general.urls')),
 		       #(r'^calendar/', include('cal.urls')),

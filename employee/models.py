@@ -13,6 +13,8 @@ class Employee(models.Model):
 	def __unicode__(self):
 		return self.user.username
 
+class Order(models.Model):
+    pass
 
 def newUser(sender, instance, **kwargs):
 	if kwargs['created']:

@@ -120,4 +120,5 @@ INSTALLED_APPS = (
 	'django.contrib.admindocs',
 	'django.contrib.markup',
 	'employee',
+	'menu',
 )

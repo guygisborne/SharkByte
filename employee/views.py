@@ -6,11 +6,13 @@ from menu.models import Meal
 
 def menuForToday(request):
 
-    if request.method == 'GET' and request.GET != {}:
-        mess=request.GET['dinner']
-        mess = Meal.objects.get(pk=int(mess))
-    else:
-        mess = ''
+
+    #if request.method == 'POST' and request.POST != {}:
+    mess=request.POST
+        #mess = Meal.objects.get(pk=int(mess))
+        
+    #else:
+        #mess = ''
 
     hello = "this is a test"
     menu = Menu.objects.all()[0]
@@ -27,4 +29,7 @@ def menuForToday(request):
     return render_to_response('order.html',{'mess':mess, 'breakfast':breakfast, 'lunch':lunch, 'dinners':dinners})
     
     
+<<<<<<< HEAD
 
+=======
+>>>>>>>  working views, need fix post
