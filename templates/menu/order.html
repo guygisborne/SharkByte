@@ -8,6 +8,7 @@
 <div class="menu inner">
 
     <h2>Breakfast</h2>
+    <h2>mess is {{ mess }}</h2>
 
     <div class="order">
         <p>We do a lot of this behind the scenes stuff at YC, because we invest in such a large number of companies, and we invest so early that investors.</p>
@@ -72,6 +73,46 @@
 
 </div>
 
+<div class="menu inner">
+
+    <h2>Dinner</h2>
+
+    <div class="order">
+
+        <form method="post" class="order" action="{% url menu.views.order %}">
+            {% csrf_token %}   
+            <p>
+                <label for="meals">Meal Choices <span class="errors">{% for error in order_form.meals.errors %} {{ error }} {% endfor %}</span></label>
+                {% for dinner in dinners %}
+
+                <label class="radio" > 
+                    <input type="radio"  name="dinner" value="{{ dinner.id }}" />
+                    <span class="value">{{ dinner.name }} - {{ dinner.description }} </span>
+                </label>    
+
+                <label class ="dropdown">
+                    <select name="TimeSlots">
+                        {% for time in timeSlots %}
+                            <option value="{{ time.id }}"> {{ time.time }}</option> 
+                        {% endfor %}
+                    </select>
+                </label>
+
+                {% endfor %}
+            </p>
+            <p>
+                <label for="instructions">Special Instructions <span class="errors">{% for error in order_form.instructions.errors %} {{ error }} {% endfor %}</span></label>
+                <textarea></textarea>
+            </p>
+            <div class="buttons">
+                <button type="submit" name="" value="" class="green thinandtall">
+                    <div><span>Place Order</span></div>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
 {% endblock %}
 <!--
 =======

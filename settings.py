@@ -57,7 +57,7 @@ USE_L10N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 if LOCAL:
-	MEDIA_ROOT = os.path.join(PROJECT_DIR, "../site_media")
+	MEDIA_ROOT = os.path.join(PROJECT_DIR, "static")
 else:
 	MEDIA_ROOT = ""
 	
@@ -65,7 +65,7 @@ else:
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 if LOCAL:
-	MEDIA_URL = 'http://localhost:8000/site_media/'
+	MEDIA_URL = 'http://localhost:8000/static/'
 else:
 	MEDIA_URL = ''
 	
@@ -108,6 +108,7 @@ ROOT_URLCONF = 'urls'
 TEMPLATE_DIRS = (
 	os.path.join(PROJECT_DIR, "templates"),
 	os.path.join(PROJECT_DIR, "templates/menu"),
+	os.path.join(PROJECT_DIR, "templates/employee"),
 )
 
 INSTALLED_APPS = (

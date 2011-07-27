@@ -13,6 +13,8 @@ urlpatterns = patterns('',
 		       (r'^createMeal/', 'menu.views.createMeal'),
 		       (r'^createMenu/', 'menu.views.createMenu'),
 
+               (r'^', include('employee.urls')),
+               (r'^menu/', include('menu.urls')),
 
 		       #(r'^', include('general.urls')),
 		       #(r'^calendar/', include('cal.urls')),

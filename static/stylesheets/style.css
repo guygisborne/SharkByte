@@ -28,7 +28,7 @@ form { }
     label { display:block; margin-bottom:2px; color:#666; }
     label span.help_text { float:right; color:#888; }
     label span.errors { float:right; color:#DF1B1B; }
-    label span.value { display:block; margin-left:2em; }
+    label span.value { min-width: 200px; display:block; margin-left:2em; }
     input, textarea { border:1px solid #b3b3b3; padding:8px; font:normal 1.077em "Helvetica Neue", Helvetica, Arial, sans-serif; }
     input { width:319px; }
     textarea { width:400px; height:5em; }

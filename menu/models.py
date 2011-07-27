@@ -34,7 +34,6 @@ class Meal(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     meal_type = models.CharField(max_length=1, choices=MEAL_TYPES)
-    timeSlot = models.ManyToManyField(TimeSlot, through="MealToMenu")
 
     pub_date = models.DateTimeField(auto_now_add=True)
 
@@ -44,6 +43,7 @@ class Meal(models.Model):
     def __str__(self):
         return smart_str('%s - %s' % (self.name, self.meal_type))
 
+
 class MealForm(ModelForm):
     class Meta:
         model = Meal
@@ -52,8 +52,9 @@ class MealForm(ModelForm):
 class Menu(models.Model):
     description = models.TextField(blank=True);
     meals = models.ManyToManyField(Meal, through="MealToMenu")
-    startDate = models.DateField(help_text="Dates must be formatted as YYYY-MM-DD HH:MM:SS, so 'June 25, 2011 Midnight' is '2011-06-25 24:00:00'")
-    expiration = models.DateField(help_text="Dates must be formatted as YYYY-MM-DD HH:MM:SS, so 'June 25, 2011 Midnight' is '2011-06-25 24:00:00'")
+    timeSlot = models.ManyToManyField(TimeSlot, through="MealToMenu")
+    startDate = models.DateField(help_text="Dates must be formatted as YYYY-MM-DD HH:MM:SS, so 'June 25, 2011 Midnight' is '2011-06-25'")
+    expiration = models.DateField(help_text="Dates must be formatted as YYYY-MM-DD HH:MM:SS, so 'June 25, 2011 Midnight' is '2011-06-25'")
 
     def __str__(self):
         return smart_str('%s' % (self.description))
