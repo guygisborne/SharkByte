@@ -1,35 +1,33 @@
 # Create your views here.
+from datetime import date
 
 from django.shortcuts import render_to_response
+from django.template import RequestContext
+
 from menu.models import Menu
 from menu.models import Meal
+
 
 def menuForToday(request):
 
 
-    #if request.method == 'POST' and request.POST != {}:
-    mess=request.POST
-        #mess = Meal.objects.get(pk=int(mess))
+    if request.method == 'POST' and request.POST != {}:
+        mess=request.POST['dinner']
+        mess = Meal.objects.get(pk=int(mess))
         
-    #else:
-        #mess = ''
+    else:
+        mess = ''
 
     hello = "this is a test"
-    menu = Menu.objects.all()[0]
-    meals = menu.meals.all()
+    menu = Menu.objects.filter(startDate=date.today().__str__())[0]
 
-    breakfast = meals[0]
-    lunch = meals[1]
-    dinner1 = meals[2]
-    dinner2 = meals[3]
-    dinners = [dinner1, dinner2]
+    breakfasts = menu.meals.filter(meal_type='b')
+    lunches = menu.meals.filter(meal_type='l')
+    dinners = menu.meals.filter(meal_type='d')
+
+
 
 
     #menu1 =  Menu.objects.create(description="yum lunch", expiration="2011-06-25", meal_type='b')
-    return render_to_response('order.html',{'mess':mess, 'breakfast':breakfast, 'lunch':lunch, 'dinners':dinners})
+    return render_to_response('order.html',{'mess':mess, 'breakfasts':breakfasts, 'lunches':lunches, 'dinners':dinners}, context_instance=RequestContext(request))
     
-    
-<<<<<<< HEAD
-
-=======
->>>>>>>  working views, need fix post

@@ -1,4 +1,3 @@
-# Create your views here.
 from menu.models import MealForm, Meal
 
 from django.http import HttpResponse

@@ -18,7 +18,7 @@ class Order(models.Model):
 
 def newUser(sender, instance, **kwargs):
 	if kwargs['created']:
-		new_employee = Employee(user=instance)
+		new_employee = Employee()
 		new_employee.save()
 
 models.signals.post_save.connect(newUser, sender=User, dispatch_uid='employee.models')

@@ -15,7 +15,7 @@ else:
 	LOCAL = False
 
 ADMINS = (
-	('Ibrahim Al-Rajhi', 'abrahamalrajhi@gmail.com'),
+	('', ''),
 )
 
 MANAGERS = ADMINS

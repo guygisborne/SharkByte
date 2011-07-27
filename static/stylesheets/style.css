@@ -1,6 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Rokkitt);
-body { background:#eee; font:normal 0.625em/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif; }
-strong { font-weight:bold; }
+body { background:#F0EFD1; font:normal 0.625em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; }
 
 #container { background:#fff; margin:20px auto; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.1); -moz-box-shadow:0 1px 3px rgba(0,0,0,0.1); -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.1); }
     #container.small { width:375px; }

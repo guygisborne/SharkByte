@@ -20,5 +20,5 @@ urlpatterns = patterns('',
 
 if settings.LOCAL:
 	urlpatterns += patterns('',
-				(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT})
+				(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.MEDIA_ROOT})
 )
