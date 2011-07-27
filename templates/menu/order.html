@@ -76,7 +76,6 @@
 <div class="menu inner">
 
     <h2>Dinner</h2>
-<<<<<<< HEAD
 
     <div class="order">
 
@@ -94,7 +93,7 @@
                 <label class ="dropdown">
                     <select name="TimeSlots">
                         {% for time in timeSlots %}
-                            <option value="{{ time.id }}"> {{ time.time }}</option> 
+                            <option value="{{ time.id }}"> {{ time.time }} - {{ freeSpots.0 }}</option> 
                         {% endfor %}
                     </select>
                 </label>

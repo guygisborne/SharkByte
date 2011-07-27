@@ -1,4 +1,4 @@
-from menu.models import MealForm, Meal, Menu, TimeSlot
+from menu.models import MealForm, Meal, Menu, TimeSlot, Order
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
@@ -21,6 +21,11 @@ def createMeal(request):
 def createMenu():
     pass
 
+def checkSpotsRemaining(timeSlotid, menuid):
+    ordersForSlot = Order.objects.filter(menuid=menuid, timeslotid=timeSlotid);
+    spotsAvail = int(TimeSlot.objects.get(pk=timeSlotid).capacity)
+    return spotsAvail - len(ordersForSlot)
+
 def order(request):
     #return render_to_response('order.html', {}, context_instanceext_instance=RequestContext(request))
 
@@ -41,6 +46,11 @@ def order(request):
 
 
     timeSlots = TimeSlot.objects.all()
+    freeSpots = [];
+
+    for timeSlot in timeSlots:
+        freeSpots.append(checkSpotsRemaining(timeSlot.id, menu.id))
+
     breakfasts = menu.meals.filter(meal_type='b')
     lunches = menu.meals.filter(meal_type='l')
     dinners = menu.meals.filter(meal_type='d')
@@ -48,11 +58,7 @@ def order(request):
     
 
     #menu1 =  Menu.objects.create(description="yum lunch", expiration="2011-06-25", meal_type='b')
-    return render_to_response('order.html',{'mess':mess, 'breakfasts':breakfasts, 'lunches':lunches, 'dinners':dinners, 'timeSlots':timeSlots}, context_instance=RequestContext(request))
+    return render_to_response('order.html',{'mess':mess, 'breakfasts':breakfasts, 'lunches':lunches, 'dinners':dinners, 'timeSlots':timeSlots, 'freeSpots':freeSpots}, context_instance=RequestContext(request))
     
-def checkSpotsRemaining(timeSlotid, menuid):
-    ordersForSlot = Order.objects.filter(menuid=menuid, timeslotid=timeSlotid);
-    spotsAvail = (TimeSlot.objects.get(pk=timeSlotid))
-    return spotsAvail - len(ordersForSlot)
     
     

@@ -70,7 +70,8 @@ class MealToMenu(models.Model):
 class Order(models.Model):
     employee = models.ForeignKey(Employee)
     timeSlot = models.ForeignKey(TimeSlot)
-    menu = models.ForeignKey(Menu)
+    menuid = models.CharField(max_length=255) 
+    timeslotid = models.CharField(max_length=255) 
     meal = models.ForeignKey(Meal)
     instructions = models.TextField(blank=True, help_text="Something Here")
     state = models.CharField(max_length=1, choices=ORDER_STATE) # confirm, cancel, complete, submitted
