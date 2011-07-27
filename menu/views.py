@@ -24,18 +24,21 @@ def createMenu():
 def order(request):
     #return render_to_response('order.html', {}, context_instanceext_instance=RequestContext(request))
 
+    if( Menu.objects.filter(startDate=date.today().__str__()) != []):
+        menu = Menu.objects.filter(startDate=date.today().__str__())[0]
+    else:
+        menu=[];
+        
     if request.method == 'POST' and request.POST != {}:
         mess=request.POST
+        post=request.POST
+        timeslotid = post['TimeSlots']
+
         
     else:
         mess = ''
 
 
-    hello = "this is a test"
-    if( Menu.objects.filter(startDate=date.today().__str__()) != []):
-        menu = Menu.objects.filter(startDate=date.today().__str__())[0]
-    else:
-        menu=[];
 
     timeSlots = TimeSlot.objects.all()
     breakfasts = menu.meals.filter(meal_type='b')
@@ -47,4 +50,9 @@ def order(request):
     #menu1 =  Menu.objects.create(description="yum lunch", expiration="2011-06-25", meal_type='b')
     return render_to_response('order.html',{'mess':mess, 'breakfasts':breakfasts, 'lunches':lunches, 'dinners':dinners, 'timeSlots':timeSlots}, context_instance=RequestContext(request))
     
-
+def checkSpotsRemaining(timeSlotid, menuid):
+    ordersForSlot = Order.objects.filter(menuid=menuid, timeslotid=timeSlotid);
+    spotsAvail = (TimeSlot.objects.get(pk=timeSlotid))
+    return spotsAvail - len(ordersForSlot)
+    
+    
