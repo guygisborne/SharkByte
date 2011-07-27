@@ -6,7 +6,7 @@
 
 {% block content %}
 
-    <form method="post" class="login" action="{% url employee.views.authenticate %}">
+    <form method="post" class="login inner" action="{% url employee.views.authenticate %}">
         {% csrf_token %}   
         <p>
             <label for="id_username">Username <span class="errors">{% for error in login_form.username.errors %} {{ error }} {% endfor %}</span></label>

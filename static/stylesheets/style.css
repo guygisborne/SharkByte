@@ -1,29 +1,42 @@
 @import url(http://fonts.googleapis.com/css?family=Rokkitt);
 body { background:#eee; font:normal 0.625em/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+strong { font-weight:bold; }
 
-#container { background:#fff; margin:20px auto 0 auto; -moz-border-radius:5px; -webkit-border-radius:5px; }
+#container { background:#fff; margin:20px auto; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.1); -moz-box-shadow:0 1px 3px rgba(0,0,0,0.1); -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.1); }
     #container.small { width:375px; }
     #container.medium { width:600px; }
     #container.large { width:900px; }
 
-#header { padding:12px 20px; border-bottom:2px dashed #eee; }
+#header { padding:12px 20px; border-bottom:2px solid #eee; }
     #logo { font:normal 2.2em/1em Rokkitt, inherit; letter-spacing:1px; }
     #nav { float:right; color:#bcbcbc; }
         #nav li { display:inline; }
         #nav a { padding:14px; margin-top:-10px; margin-right:-12px; display:inline-block; font-size:1.3em; text-decoration:none; font-weight:bold; text-transform:uppercase; color:#aaa; }
         #nav a:hover { color:#6a8e80; }
 
-#content { padding:12px 20px; }
-    #content h2 { font:bold 1.6em/1em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; margin-bottom:10px; }
+
+#content { }
+    #content h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; margin-bottom:10px; }
+    #content p { font-size:1.3em; line-height:1.667em; margin-bottom:16px; color:#333; }
+    .inner { padding:12px 20px; }
+    .success { font-size:1.2em; color:rgba(0,0,0,0.6); padding:12px 20px; background:rgba(145, 200, 74, 0.2); display:none; }
+
+.menu { padding:12px 20px; border-bottom:2px dashed #eee; }
+    .menu:last-child { border-bottom:none; }
 
 form { }
-    p { display:inline-block; margin-bottom:10px; }
-    label { display:block; margin-bottom:4px; font-size:1.2em; color:#666; }
-    label span.help_text { display:block; color:#888; margin-top:2px; }
+    form p { display:inline-block; margin-bottom:10px !important; }
+    label { display:block; margin-bottom:2px; color:#666; }
+    label span.help_text { float:right; color:#888; }
     label span.errors { float:right; color:#DF1B1B; }
-    input, textarea { border:1px solid #b3b3b3; padding:8px; font:normal 1em "Helvetica Neue", Helvetica, Arial, sans-serif; }
-    input { width:319px; font-size:1.4em; }
-    textarea { width:400px; line-height:1.57em; }
+    label span.value { display:block; margin-left:2em; }
+    input, textarea { border:1px solid #b3b3b3; padding:8px; font:normal 1.077em "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    input { width:319px; }
+    textarea { width:400px; height:5em; }
+
+    label.radio { cursor:pointer; line-height:1.667em; color:#333; margin-bottom:6px; }
+    label.radio:last-child { margin-bottom:0px; }
+    label.radio input { width:auto; float:left; margin-top:5px; }
 
 /*
  * Button styles ripped from http://www.m.grooveshark.com

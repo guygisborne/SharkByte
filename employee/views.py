@@ -41,12 +41,14 @@ def editProfile(request):
 		return HttpResponseRedirect(reverse('login'))
 
 	employee = get_object_or_404(Employee, pk=request.session['employeeID'])
+	success = False
 	if request.method == 'POST':
 		employee_form = EditEmployeeForm(request.POST, instance=employee)
 		if employee_form.is_valid():
 			employee_form.save()
+			success = True
 	else:
 		employee_form = EditEmployeeForm(instance=employee)
 
-	return render_to_response('edit_profile.html', { 'employee_form': employee_form }, context_instance=RequestContext(request))
+	return render_to_response('edit_profile.html', { 'employee_form': employee_form, 'success': success }, context_instance=RequestContext(request))
 

@@ -1,7 +1,75 @@
 {% extends "base.html" %}    
 
-{% block main %}
+{% block title %}- Place an Order{% endblock %}
+{% block size %}medium{% endblock %}
 
-Order here
+{% block content %}
+
+<div class="menu inner">
+
+    <h2>Breakfast</h2>
+
+    <div class="order">
+        <p>We do a lot of this behind the scenes stuff at YC, because we invest in such a large number of companies, and we invest so early that investors.</p>
+
+        <form method="post" class="order" action="{% url employee.views.editProfile %}">
+            {% csrf_token %}   
+            <p>
+                <label for="meals">Meal Choices <span class="errors">{% for error in order_form.meals.errors %} {{ error }} {% endfor %}</span></label>
+                <label class="radio" for="FIRST_MEAL"> 
+                    <input type="radio" id="FIRST_MEAL" name="meals" value="SOME VALUE" />
+                    <span class="value">Reading Fred's post made me go back and look at the emails I exchanged with him at the time, trying to convince him to invest in Airbnb. It was quite interesting to read.</span>
+                </label>    
+                <label class="radio" for="SECON_MEAL"> 
+                    <input type="radio" id="SECON_MEAL" name="meals" value="SOME VALUE" />
+                    <span class="value">Just some writing made me go back and look at the emails I exchanged with him at the time, trying to convince him to invest in Airbnb.</span>
+                </label>    
+            </p>
+            <p>
+                <label for="id_instructions">Special Instructions <span class="errors">{% for error in order_form.instructions.errors %} {{ error }} {% endfor %}</span></label>
+                <textarea></textarea>
+            </p>
+            <div class="buttons">
+                <button type="submit" name="" value="" class="green thinandtall">
+                    <div><span>Place Order</span></div>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div class="menu inner">
+
+    <h2>Lunch</h2>
+
+    <div class="order">
+
+        <form method="post" class="order" action="{% url employee.views.editProfile %}">
+            {% csrf_token %}   
+            <p>
+                <label for="meals">Meal Choices <span class="errors">{% for error in order_form.meals.errors %} {{ error }} {% endfor %}</span></label>
+                <label class="radio" for="FIRST_MEAL"> 
+                    <input type="radio" id="FIRST_MEAL" name="meals" value="SOME VALUE" />
+                    <span class="value">Reading Fred's post made me go back and look at the emails I exchanged with him at the time, trying to convince him to invest in Airbnb. It was quite interesting to read.</span>
+                </label>    
+                <label class="radio" for="SECON_MEAL"> 
+                    <input type="radio" id="SECON_MEAL" name="meals" value="SOME VALUE" />
+                    <span class="value">Just some writing made me go back and look at the emails I exchanged with him at the time, trying to convince him to invest in Airbnb.</span>
+                </label>    
+            </p>
+            <p>
+                <label for="instructions">Special Instructions <span class="errors">{% for error in order_form.instructions.errors %} {{ error }} {% endfor %}</span></label>
+                <textarea></textarea>
+            </p>
+            <div class="buttons">
+                <button type="submit" name="" value="" class="green thinandtall">
+                    <div><span>Place Order</span></div>
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
 
 {% endblock %}
