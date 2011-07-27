@@ -1,6 +1,7 @@
 @import url(http://fonts.googleapis.com/css?family=Rokkitt);
 body { background:#eee; font:normal 0.625em/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 strong { font-weight:bold; }
+em { font-style:italic; }
 
 #container { background:#fff; margin:20px auto; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.1); -moz-box-shadow:0 1px 3px rgba(0,0,0,0.1); -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.1); }
     #container.small { width:375px; }
@@ -14,15 +15,21 @@ strong { font-weight:bold; }
         #nav a { padding:14px; margin-top:-10px; margin-right:-12px; display:inline-block; font-size:1.3em; text-decoration:none; font-weight:bold; text-transform:uppercase; color:#aaa; }
         #nav a:hover { color:#6a8e80; }
 
-
 #content { }
     #content h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; margin-bottom:10px; }
+    #content h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
     #content p { font-size:1.3em; line-height:1.667em; margin-bottom:16px; color:#333; }
     .inner { padding:12px 20px; }
     .success { font-size:1.2em; color:rgba(0,0,0,0.6); padding:12px 20px; background:rgba(145, 200, 74, 0.2); display:none; }
 
 .menu { padding:12px 20px; border-bottom:2px dashed #eee; }
     .menu:last-child { border-bottom:none; }
+    .menu .expiration { display:none; }
+    .menu.expired form { opacity:0.6; }
+    .menu.expired .expiration { display:inline; }
+    .ordered { background:#eee; padding:8px 12px; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
+    .ordered .buttons button div { background-color:#eee; }
+    .ordered .buttons button span { background-color:#eee; }
 
 form { }
     form p { display:inline-block; margin-bottom:10px !important; }
@@ -33,6 +40,7 @@ form { }
     input, textarea { border:1px solid #b3b3b3; padding:8px; font:normal 1.077em "Helvetica Neue", Helvetica, Arial, sans-serif; }
     input { width:319px; }
     textarea { width:400px; height:5em; }
+    select { width:319px; }
 
     label.radio { cursor:pointer; line-height:1.667em; color:#333; margin-bottom:6px; }
     label.radio:last-child { margin-bottom:0px; }
@@ -47,13 +55,18 @@ form { }
 .buttons.alignLeft {text-align: left;}
 .buttons button {cursor: pointer; margin-left:-2px; border: none; background: none; overflow: visible; padding: 0;}
 .buttons button div {display: block; float: left; height: 32px; padding: 0 16px 0 0; background: url(../images/form_button.png) top right no-repeat; font-size: 14px; white-space:nowrap;}
-.buttons button span {background: url(../images/form_button.png) top left no-repeat #FFF; font-size: 13px; display: block; padding: 0 0 0 17px; height: 32px; line-height: 29px; float: left; white-space:nowrap; clear:none; color: #FFF; text-shadow: 0px -1px 0px #2273a8;}
+.buttons button span {background: url(../images/form_button.png) top left no-repeat #fff; font-size: 13px; display: block; padding: 0 0 0 17px; height: 32px; line-height: 29px; float: left; white-space:nowrap; clear:none; color: #FFF; text-shadow: 0px -1px 0px rgba(0,0,0,0.5);}
 .buttons button:hover div {background-position: right -32px;}
 .buttons button:hover span {background-position: 0 -32px; color: #FFF;}
 .buttons button:active, .buttons button:focus {outline: none;}
 .buttons button:active div {background-position: right -64px;}
 .buttons button:active span {background-position: 0 -64px; color: #FFF;}
-.buttons button.inactive {opacity: .3; filter: alpha(opacity = .3);}
+
+.buttons button.inactive div {cursor: default;}
+.buttons button.inactive:hover div {background-position:top right;}
+.buttons button.inactive:hover span {background-position:top left;}
+.buttons button.inactive:active div {background-position:top right;}
+.buttons button.inactive:active span {background-position:top left;}
 
 .buttons button.green div {background-position: right -96px;}
 .buttons button.green span {background-position: left -96px; text-shadow: 0px -1px 0px #56831c;}
@@ -61,4 +74,12 @@ form { }
 .buttons button.green:hover span {background-position: left -128px;}
 .buttons button.green:active div {background-position: right -160px;}
 .buttons button.green:active span {background-position: left -160px;}
+
+.buttons button.red div {background-position: right -192px;}
+.buttons button.red span {background-position: left -192px; text-shadow: 0px -1px 0px #9c1717;}
+.buttons button.red:hover div {background-position: right -224px;}
+.buttons button.red:hover span {background-position: left -224px;}
+.buttons button.red:active div {background-position: right -256px;}
+.buttons button.red:active span {background-position: left -256px;}
+
 
