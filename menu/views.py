@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.contrib import auth
 
 from datetime import date, datetime
+import datetime
 
 def test(request):
     """docstring for test"""
@@ -77,7 +78,7 @@ def confirmMeal(orders, meal_type):
     if dinnerOrderIndex != -1:
         dinnerOrder = orders[dinnerOrderIndex]
         dinnerOrder.state='c'
-        dinnerOrder.confirm_time = datetime.today()
+        dinnerOrder.confirm_time = datetime.datetime.today()
         dinnerOrder.save()
 
 def createMenuItem(menu, orders, meal_type):
@@ -101,6 +102,7 @@ def createMenuItem(menu, orders, meal_type):
                     menuItem['orderStatus']=order.state
                     menuItem['regMeal']['meal'] = order.meal
                     menuItem['regMeal']['time'] = order.timeSlot.time
+                    menuItem['timeWindow'] = checkConfirmTimeWindow(order.timeSlot.time)
     
     if( not 'meal' in menuItem['regMeal']):
         menuItem['meals'] = menu.meals.filter(meal_type=meal_type)
@@ -118,20 +120,25 @@ def createMenuItem(menu, orders, meal_type):
     
     return menuItem
     
+def checkConfirmTimeWindow(time):
+    timeWindow = 20
+    currentTime = datetime.datetime.today() + datetime.timedelta(hours=1, minutes=timeWindow)
+    return ( currentTime.time() > time )
+    
 
 def order(request):
     #return render_to_response('order.html', {}, context_instanceext_instance=RequestContext(request))
     employee = Employee.objects.get(pk=request.session['employeeID'])
     orders = Order.objects.filter(employee=employee)
-    regBreakfast = {}
-    regLunch = {}
-    regDinner = {}
-    breakfasts = []
-    lunches = []
-    dinners = []
-    orderStatus = {}
+
+    if ( len( Menu.objects.filter(startDate=date.today()) ) > 0 ):
+        menu = Menu.objects.filter(startDate=date.today().__str__())[0]
+    else:
+        return noMenu(request)
+
     error = []
     menuItems= []
+
     mess = ''
 
     # To handle the confirms nd cancel of the meals
@@ -145,10 +152,6 @@ def order(request):
     if 'employeeID' not in request.session:
         return HttpResponseRedirect(reverse('login'))
 
-    if ( Menu.objects.filter(startDate=date.today()).__str__() != [] ):
-        menu = Menu.objects.filter(startDate=date.today().__str__())[0]
-    else:
-        menu=[];
         
     if request.method == 'POST' and request.POST != {}:
         mess=request.POST
@@ -172,5 +175,7 @@ def order(request):
     #menu1 =  Menu.objects.create(description="yum lunch", expiration="2011-06-25", meal_type='b')
     return render_to_response('order.html',{'mess':mess, 'errors':error, 'menuItems':menuItems}, context_instance=RequestContext(request))
     
-    
+def noMenu(request):
+    return render_to_response('noMenu.html')
+     
     

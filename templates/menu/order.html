@@ -19,9 +19,11 @@
             <p><em><strong>{{ menuItem.regMeal.meal.name }}</strong> - {{ menuItem.regMeal.meal.description }}</em></p>
             <p><strong>Make sure you come back at {{ menuItem.regMeal.time }} to confirm your order</strong>, or your meal won't be prepared. In the meantime, you can still cancel and reorder.</p>
             <div class="buttons">
+            {% if menuItem.timeWindow %}
                 <button class="inactive thinandtall" onclick="location.href='{% url menu.views.order %}confirm/{{ menuItem.regMeal.meal.meal_type }}'">
                     <div><span>Confirm Order {{ menuItem.regMeal.time }}</span></div>
                 </button>
+            {% endif %}
                 <button class="red thinandtall" onclick="location.href='{% url menu.views.order %}cancel/{{ menuItem.regMeal.meal.meal_type }}'">
                     <div><span>Cancel Order</span></div>
                 </button>

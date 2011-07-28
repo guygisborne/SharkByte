@@ -24,7 +24,7 @@ ORDER_STATE = (
 )
 
 class TimeSlot(models.Model):
-    time = models.CharField(max_length=6, help_text="Time must be formatted as HH:MM")  
+    time = models.TimeField(max_length=6, help_text="Time must be formatted as HH:MM")  
     capacity = models.CharField(max_length=4, help_text="How many people can sign up for this time slot")
     meal_type = models.CharField(max_length=1, choices=MEAL_TYPES)
 
