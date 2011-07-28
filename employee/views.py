@@ -62,7 +62,6 @@ def editProfile(request):
 
 def menuForToday(request):
 
-
     if request.method == 'POST' and request.POST != {}:
         mess=request.POST['dinner']
         mess = Meal.objects.get(pk=int(mess))

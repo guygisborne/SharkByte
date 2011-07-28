@@ -26,6 +26,8 @@ ORDER_STATE = (
 class TimeSlot(models.Model):
     time = models.CharField(max_length=6, help_text="Time must be formatted as HH:MM")  
     capacity = models.CharField(max_length=4, help_text="How many people can sign up for this time slot")
+    meal_type = models.CharField(max_length=1, choices=MEAL_TYPES)
+
     
     def __str__(self):
         return smart_str('%s - %s' % (self.time, self.capacity))
@@ -75,7 +77,8 @@ class Order(models.Model):
     meal = models.ForeignKey(Meal)
     instructions = models.TextField(blank=True, help_text="Something Here")
     state = models.CharField(max_length=1, choices=ORDER_STATE) # confirm, cancel, complete, submitted
-    pub_date = models.DateTimeField(auto_now_add=True)
+    confirm_time = models.DateTimeField(blank=True, null=True)
+
 
     def save(self):
         # make sure the meal hasn't expired on submission

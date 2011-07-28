@@ -7,4 +7,5 @@ database.db
 tmtags
 .DS_Store
 *.swp
+*.sw*
 */migrations/
