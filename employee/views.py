@@ -8,7 +8,7 @@ from models import *
 
 def login(request, prev_login_form=None):
 	if 'employeeID' in request.session:
-		return HttpResponseRedirect(reverse('edit-profile'))
+		return HttpResponseRedirect(reverse('order'))
 
 	login_form = (prev_login_form if prev_login_form else LoginForm())
 	return render_to_response('login.html', { 'login_form': login_form }, context_instance=RequestContext(request))
@@ -21,7 +21,7 @@ def authenticate(request):
 	if not login_form.is_valid():
 		return login(request, login_form)
 
-	employee = Employee.objects.get_or_create(username=login_form.cleaned_data['username'])
+	employee = Employee.objects.get_or_create(username=login_form.cleaned_data['username'], defaults={ 'display_name': login_form.cleaned_data['display_name'] })
 	employee = { 'employeeID': employee[0].pk, 'is_new': employee[1] }
 	request.session['employeeID'] = employee['employeeID']
 

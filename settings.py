@@ -109,6 +109,7 @@ TEMPLATE_DIRS = (
 	os.path.join(PROJECT_DIR, 'templates'),
 	os.path.join(PROJECT_DIR, 'templates/employee'),
 	os.path.join(PROJECT_DIR, 'templates/menu'),
+	os.path.join(PROJECT_DIR, 'templates/admin'),
 )
 
 INSTALLED_APPS = (
