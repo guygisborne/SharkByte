@@ -20,9 +20,11 @@ em { font-style:italic; }
     #content h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
     #content p { font-size:1.3em; line-height:1.667em; margin-bottom:16px; color:#333; }
     .inner { padding:12px 20px; }
+    .division { border-bottom:2px dashed #eee; }
+    .division:last-child { border-bottom:none; }
     .success { font-size:1.2em; color:rgba(0,0,0,0.6); padding:12px 20px; background:rgba(145, 200, 74, 0.2); display:none; }
 
-.menu { padding:12px 20px; border-bottom:2px dashed #eee; }
+.menu {}
     .menu:last-child { border-bottom:none; }
     .menu .expiration { display:none; }
     .menu.expired form { opacity:0.6; }
@@ -30,6 +32,15 @@ em { font-style:italic; }
     .ordered { background:#eee; padding:8px 12px; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
     .ordered .buttons button div { background-color:#eee; }
     .ordered .buttons button span { background-color:#eee; }
+
+.menu_link { display:block; text-decoration:none; }
+    .menu_link h2 { color:#000; line-height:0; margin-bottom:0 !important; }
+    .menu_link .meta { width:175px; float:right; color:#888; }
+    .menu_link .meta .count { float:left; }
+    .menu_link .meta .time { float:right; }
+
+.order { display:block; }
+    .order > div { display:inline-block; width:100px; }
 
 form { }
     form p { display:inline-block; margin-bottom:10px !important; }
