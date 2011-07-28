@@ -1,0 +1,21 @@
+<html>
+
+<form action="createMenu_submit" method="get" accept-charset="utf-8">
+     
+    {{ for meals in allmeals }}
+
+    <p> {{ meals.type }} </p>
+    <select name="{{ meals.type }}">
+    {% for meal in meals %}
+    <option value="{{ meal.id }}"> {{ meal.name }} </option>
+    </select>
+    {% endfor %}
+    {% endfor %}
+    
+</form>
+    
+
+<p><input type="submit" value="Continue &rarr;"0></p>
+</form>
+
+</html>
