@@ -1,5 +1,5 @@
-@import url(http://fonts.googleapis.com/css?family=Rokkitt);
-body { background:#eee; font:normal 0.625em/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+/* @import url(http://fonts.googleapis.com/css?family=Rokkitt); */
+body { background:#eee; font:normal 0.625em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; }
 strong { font-weight:bold; }
 em { font-style:italic; }
 
@@ -43,11 +43,11 @@ em { font-style:italic; }
     .order > div { display:inline-block; width:100px; }
 
 form { }
-    form p { display:inline-block; margin-bottom:10px !important; }
+    form p { display:block; margin-bottom:10px !important; }
     label { display:block; margin-bottom:2px; color:#666; }
     label span.help_text { float:right; color:#888; }
     label span.errors { float:right; color:#DF1B1B; }
-    label span.value { display:block; margin-left:2em; }
+    label span.value { min-width: 200px; display:block; margin-left:2em; }
     input, textarea { border:1px solid #b3b3b3; padding:8px; font:normal 1.077em "Helvetica Neue", Helvetica, Arial, sans-serif; }
     input { width:319px; }
     textarea { width:400px; height:5em; }

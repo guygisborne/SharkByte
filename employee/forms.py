@@ -22,5 +22,5 @@ class LoginForm(forms.Form):
 
 
 class EditEmployeeForm(ModelForm):
-	class Meta:                                                                                                                                                                                             
+	class Meta:
 		model = Employee

@@ -1,8 +1,15 @@
+# Create your views here.
+from datetime import date
+
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
+
 from django.core.urlresolvers import reverse
 
+
+from menu.models import Menu
+from menu.models import Meal
 from forms import *
 from models import *
 
@@ -12,7 +19,7 @@ def login(request, prev_login_form=None):
 
 	login_form = (prev_login_form if prev_login_form else LoginForm())
 	return render_to_response('login.html', { 'login_form': login_form }, context_instance=RequestContext(request))
-	
+
 def authenticate(request):
 	if request.method != 'POST':
 		return HttpResponseRedirect(reverse('login'))
@@ -51,4 +58,29 @@ def editProfile(request):
 		employee_form = EditEmployeeForm(instance=employee)
 
 	return render_to_response('edit_profile.html', { 'employee_form': employee_form, 'success': success }, context_instance=RequestContext(request))
+
+
+def menuForToday(request):
+
+    if request.method == 'POST' and request.POST != {}:
+        mess=request.POST['dinner']
+        mess = Meal.objects.get(pk=int(mess))
+        
+    else:
+        mess = ''
+
+    mess = request.session['employeeID']
+
+    hello = "this is a test"
+    menu = Menu.objects.filter(startDate=date.today().__str__())[0]
+
+    breakfasts = menu.meals.filter(meal_type='b')
+    lunches = menu.meals.filter(meal_type='l')
+    dinners = menu.meals.filter(meal_type='d')
+
+    
+
+    #menu1 =  Menu.objects.create(description="yum lunch", expiration="2011-06-25", meal_type='b')
+    return render_to_response('order.html',{'mess':mess, 'breakfasts':breakfasts, 'lunches':lunches, 'dinners':dinners}, context_instance=RequestContext(request))
+    
 

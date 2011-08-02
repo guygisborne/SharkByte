@@ -3,8 +3,8 @@ import socket
 import sys
 
 PROJECT_DIR = os.path.dirname(__file__)
-PROJECT_NAME = 'SharkByte'
-STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, 'static')
+PROJECT_NAME = 'kitchen'
+STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, "static")
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG                               
@@ -15,7 +15,7 @@ else:
 	LOCAL = False
 
 ADMINS = (
-	('Ibrahim Al-Rajhi', 'abrahamalrajhi@gmail.com'),
+	('', ''),
 )
 
 MANAGERS = ADMINS
@@ -38,7 +38,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/New_York'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -57,7 +57,7 @@ USE_L10N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 if LOCAL:
-	MEDIA_ROOT = os.path.join(PROJECT_DIR, 'static')
+	MEDIA_ROOT = os.path.join(PROJECT_DIR, "static")
 else:
 	MEDIA_ROOT = ""
 	
@@ -103,7 +103,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 	"django.contrib.messages.context_processors.messages",
 )
 
-ROOT_URLCONF = PROJECT_NAME + '.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
 	os.path.join(PROJECT_DIR, 'templates'),
@@ -121,6 +121,6 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.admindocs',
 	'django.contrib.markup',
-	PROJECT_NAME + '.employee',
-	PROJECT_NAME + '.menu',
+	'employee',
+	'menu',
 )
