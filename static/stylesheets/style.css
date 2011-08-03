@@ -16,7 +16,7 @@ em { font-style:italic; }
         #nav a:hover { color:#6a8e80; }
 
 #content { }
-    #content h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; margin-bottom:10px; }
+    #content h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; margin-bottom:10px; }
     #content h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
     #content p { font-size:1.3em; line-height:1.667em; margin-bottom:16px; color:#333; }
     .inner { padding:12px 20px; }

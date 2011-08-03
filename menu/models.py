@@ -15,7 +15,7 @@ CONFIRM_MIN_DELTA = 20
 
 class Timeslot(models.Model):
 	time = models.TimeField(help_text='Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')  
-	capacity = models.PositiveIntegerField(help_text='Number of employees this timeslot can serve.') 
+	capacity = models.PositiveIntegerField(blank=True, null=True, help_text='An optional limit of employees this timeslot can serve; leave blank to serve an unlimited number of employees.') 
 
 	def availableCountFor(menu, self):
 		from menu.models import Order 
@@ -23,10 +23,16 @@ class Timeslot(models.Model):
 		return self.capacity - usedSlots
 
 	def isAvailableFor(menu, self):
-		return self.availableCountFor(menu) > 0
+		if self.capacity:
+			return self.availableCountFor(menu) > 0
+		else:
+			return True
 
 	def __unicode__(self):
-		return u'{0} ({1} slot capacity)'.format(self.time, self.capacity)
+		if self.capacity:
+			return u'{0} ({1} slot capacity)'.format(self.time, self.capacity)
+		else:
+			return u'{0}'.format(self.time)
 
 
 class Meal(models.Model):
@@ -42,19 +48,21 @@ class MenuManager(models.Manager):
 		todaysMenus = []
 
 		for type, typeName in MENU_TYPES:
-			menu = False
-			order = False
+			menu = {
+				  'typeName': typeName
+				, 'menu': False
+				, 'order': False
+			}
 
 			try:
-				menu = self.filter(type=type, publishDate=date.today())[0]
+				menu['menu'] = self.filter(type=type, publishDate=date.today())[0]
 			except IndexError: 
 				pass
 			else:
-				order = menu.getOrderFor(employee)
+				menu['order'] = menu['menu'].getOrderFor(employee)
 
-			todaysMenus.append((typeName, menu, order)) 	
+			todaysMenus.append(menu) 	
 
-		print todaysMenus
 		return todaysMenus
 
 
@@ -64,7 +72,7 @@ class Menu(models.Model):
 	timeslots = models.ManyToManyField(Timeslot)
 	description = models.TextField(blank=True);
 	publishDate = models.DateField(help_text='The day this menu will be available for.')
-	publishTime = models.TimeField(blank=True, help_text='An optional time when this menu will be available at. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
+	publishTime = models.TimeField(blank=True, null=True, help_text='An optional time when this menu will be available at. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
 	endTime = models.TimeField(help_text='The time when this menu will expire and become unavailable. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
 
 	objects = models.Manager()
@@ -117,7 +125,7 @@ class Order(models.Model):
 	confirmedAt = models.DateTimeField(blank=True, null=True)
 
 	def confirmableAt(self):
-		return self.timeslot.time - timedelta(minutes=CONFIRM_MIN_DELTA)
+		return self.timeslot.time - timedelta(minutes=20)
 
 	def isConfirmable(self):
 		return self.confirmableAt < datetime.time(datetime.now())
