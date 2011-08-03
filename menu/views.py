@@ -11,31 +11,43 @@ from models import *
 from forms import *
 from employee.models import *
 
-def order(request):
-	if 'employeeID' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
+def employee_required(viewFn):
+	def decorated(request, *args, **kwargs):
+		if 'employeeID' not in request.session:
+			return HttpResponseRedirect(reverse('login'))
+		else:
+			return viewFn(request, *args, **kwargs)
+	return decorated
 
+def post_required(redirect):
+	def decorator(viewFn):
+		def decorated(request, *args, **kwargs):
+			if request.method != 'POST':
+				return HttpResponseRedirect(reverse(redirect))
+			else:
+				return viewFn(request, *args, **kwargs)
+		return decorated
+	return decorator
+
+@employee_required
+def order(request, prevOrder=None):
 	employee = get_object_or_404(Employee, pk=request.session['employeeID'])
 	menus = Menu.managed.todaysMenus(employee)
 
 	for menu in menus:
-		menu['form'] = OrderForm(menu['menu'], instance=menu['menu']) if menu['menu'] else False
+		menu['form'] = OrderForm(menu['menu'], instance=prevOrder) if menu['menu'] else False
 
 	return render_to_response('order.html', { 'menus': menus }, context_instance=RequestContext(request))
 
+@employee_required
 def cancelOrder(request, orderID):
-    if 'employeeID' not in request.session:
-        return HttpResponseRedirect(reverse('login'))
-
 	employee = get_object_or_404(Employee, pk=request.session['employeeID'])
 	order = get_object_or_404(Order, pk=orderID, employee=employee)
 	order.delete()
 	return HttpResponseRedirect(reverse('order'))
 
+@employee_required
 def confirmOrder(request, orderID):
-    if 'employeeID' not in request.session:
-        return HttpResponseRedirect(reverse('login'))
-
 	employee = get_object_or_404(Employee, pk=request.session['employeeID'])
 	order = get_object_or_404(Order, pk=orderID, employee=employee)
 
@@ -43,19 +55,19 @@ def confirmOrder(request, orderID):
 		order.confirm()
 	return HttpResponseRedirect(reverse('order'))
 
+@employee_required
+@post_required
 def placeOrder(request, menuID):
-	if 'employeeID' not in request.session:
-		return HttpResponseRedirect(reverse('login'))
+	employee = get_object_or_404(Employee, pk=request.session['employeeID'])
+	menu = get_object_or_404(Menu, pk=menuID)
+	order = Order(employee=employee, menu=menu)
+	orderForm = OrderForm(request.POST, instance=order)
 
-	if request.method != 'POST':
+	if orderForm.is_valid():
+		newOrder = orderForm.save()
 		return HttpResponseRedirect(reverse('order'))
-
-	#employee = get_object_or_404(Employee, pk=request.session['employeeID'])
-	#menu = get_object_or_404(Menu, pk=menuID)
-	#meal = get_object_or_404(Meal, pk=formData['mealID'])
-	#timeslot = get_object_or_404(Menu, pk=formData['timeslotID'])
-	#instructions = formData['instructions']
-	
+	else:
+		return order(request, orderForm)
 
 def menuList(request):
 	if not request.user.is_authenticated() or not request.user.is_staff:
