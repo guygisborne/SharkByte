@@ -40,22 +40,20 @@ em { font-style:italic; }
     .menu_link .meta .time { float:right; }
 
 .order { display:block; }
-    .order > div { display:inline-block; width:100px; }
 
 form { }
     form p { display:block; margin-bottom:10px !important; }
     label { display:block; margin-bottom:2px; color:#666; }
     label span.help_text { float:right; color:#888; }
     label span.errors { float:right; color:#DF1B1B; }
-    label span.value { min-width: 200px; display:block; margin-left:2em; }
+    label span.value { display:block; margin-left:2em; }
     input, textarea { border:1px solid #b3b3b3; padding:8px; font:normal 1.077em "Helvetica Neue", Helvetica, Arial, sans-serif; }
     input { width:319px; }
     textarea { width:400px; height:5em; }
     select { width:319px; }
 
-    label.radio { cursor:pointer; line-height:1.667em; color:#333; margin-bottom:6px; }
-    label.radio:last-child { margin-bottom:0px; }
-    label.radio input { width:auto; float:left; margin-top:5px; }
+    .radio label { cursor:pointer; font-size:1.2em; line-height:1.667em; color:#333; margin-bottom:8px; }
+    .radio input { width:auto; float:left; margin-top:5px; margin-right:8px; }
 
 /*
  * Button styles ripped from http://www.m.grooveshark.com

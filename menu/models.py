@@ -2,6 +2,7 @@ from datetime import date, time, datetime, timedelta
 
 from django.db import models
 from django.contrib.contenttypes import generic
+from django.template.defaultfilters import date as date_filter
 
 from employee.models import Employee
 
@@ -11,7 +12,7 @@ MENU_TYPES = (
 	, ('d', 'dinner')
 )
 
-CONFIRM_MIN_DELTA = 20
+CONFIRM_DELTA = 20
 
 class Timeslot(models.Model):
 	time = models.TimeField(help_text='Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')  
@@ -19,8 +20,11 @@ class Timeslot(models.Model):
 
 	def availableCountFor(self, menu):
 		from menu.models import Order 
-		used_slots = len(Order.objects.filter(menu=menu, timeslot=self))
-		return self.capacity - used_slots
+		if self.capacity:
+			used_slots = len(Order.objects.filter(menu=menu, timeslot=self))
+			return self.capacity - used_slots
+		else:
+			return 0
 
 	def isAvailableFor(self, menu):
 		if self.capacity:
@@ -30,21 +34,33 @@ class Timeslot(models.Model):
 
 	def __unicode__(self):
 		if self.capacity:
-			return u'{0} ({1} slot capacity)'.format(self.time, self.capacity)
+			return u'{0} ({1} slot capacity)'.format(self.getFormattedTime(), self.capacity)
 		else:
-			return u'{0}'.format(self.time)
+			return u'{0} (unlimited)'.format(self.time)
+
+	def getFormattedTime(self):
+		relative_time = datetime.combine(date.today(), self.time)
+		return date_filter(relative_time, 'g:i a')
 
 	def getFieldName(self, menu):
-		formatted_time = self.time.strftime('%I:%M %p')
-		return '{0} ({1} available slots)'.format(formatted_time, self.availableCountFor(menu))
+		if self.isAvailableFor(menu):
+			if self.capacity:
+				return '{0} ({1} available slots)'.format(self.getFormattedTime(), self.availableCountFor(menu))
+			else:
+				return '{0} (unlimited)'.format(self.getFormattedTime(), self.availableCountFor(menu))
+		else:
+			return '{0} (FULL)'.format(self.getFormattedTime())
 
 
 class Meal(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
+	name = models.CharField(max_length=255)
+	description = models.TextField()
 
-    def __unicode__(self):
-        return self.name
+	def __unicode__(self):
+		return self.name
+
+	def getFieldName(self):
+		return '{0} - {1}'.format(self.name, self.description)
 
 
 class MenuManager(models.Manager):
@@ -71,7 +87,7 @@ class Menu(models.Model):
 	meals = models.ManyToManyField(Meal)
 	timeslots = models.ManyToManyField(Timeslot)
 	description = models.TextField(blank=True);
-	publish_date = models.DateField(help_text='The day this menu will be available for.')
+	publish_date = models.DateField(help_text='The day this menu will be available.')
 	publish_time = models.TimeField(blank=True, null=True, help_text='An optional time when this menu will be available at. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
 	end_time = models.TimeField(help_text='The time when this menu will expire and become unavailable. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
 
@@ -125,16 +141,21 @@ class Order(models.Model):
 	is_confirmed = models.BooleanField(default=False, editable=False) 
 	confirmed_at = models.DateTimeField(blank=True, null=True, editable=False)
 
+	def getConfirmableTime(self):
+		relative_time = datetime.combine(date.today(), self.timeslot.time)
+		return relative_time - timedelta(minutes=CONFIRM_DELTA)
+
 	def confirmableAt(self):
-		return self.timeslot.time - timedelta(minutes=20)
+		return date_filter(self.getConfirmableTime(), 'g:i a')
 
 	def isConfirmable(self):
-		return self.confirmable_at < datetime.time(datetime.now())
+		return self.getConfirmableTime() < datetime.now()
 
 	def confirm(self):
-		self.is_confirmed = True
-		self.confirmed_at = datetime.now()
-		super(Order, self).save()
+		if self.isConfirmable():
+			self.is_confirmed = True
+			self.confirmed_at = datetime.now()
+			super(Order, self).save()
 
 	def __unicode__(self):
 		return '{0} ordered {1}'.format(self.employee, self.meal)

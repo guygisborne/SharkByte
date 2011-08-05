@@ -5,30 +5,25 @@
 {% block content %}
 
     {% for menu in menus %}
-        <div class="menu inner {% if menu.menu.isExpired %}expired{% endif %}">
+        <div class="menu inner division {% if menu.menu.isExpired %}expired{% endif %}">
             <h2>{{ menu.typename }} <span class="expiration">is Over!</span></h2>
 
             {% if not menu.menu %}
                 <p>A {{ menu.typename }} menu has yet to be posted.</p>
             {% else %}
                 {% if not menu.menu.isPublishable %}
-                    <p>A {{ menu.typename }} menu will be published at <strong>{{ menu.menu.publishTime }}</strong> today.
+                    <p>A {{ menu.typename }} menu will be published at <strong>{{ menu.menu.publish_time }}</strong> today.</p>
                 {% else %}
                     {% if menu.order %}
 
                         <div class="ordered">
-                            {% if menu.order.isConfirmed %}
+                            {% if menu.order.is_confirmed %}
                                 <h3>You confirmed your order for:</h3>
-                                <p><em>{{ menu.order.meal }}</em></p>
-                                <p>Your timeslot is <strong>{{ menu.order.timeslot.time }}</strong></p>
-                                <div class="buttons">
-                                    <button class="inactive thinandtall">
-                                        <div><span>Order Confirmed!</span></div>
-                                    </button>
-                                </div>
+                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
+                                <p>Your timeslot is <strong>{{ menu.order.timeslot.getFormattedTime }}</strong></p>
                             {% else %}
                                 <h3>You ordered:</h3>
-                                <p><em>{{ menu.order.meal }}</em></p>
+                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
                                 <p><strong>Make sure you come back at {{ menu.order.confirmableAt }} to confirm your order</strong>, or your meal won't be prepared. In the meantime, you can still cancel and reorder.</p>
                                 <div class="buttons">
                                     {% if menu.order.isConfirmable %}
@@ -56,7 +51,7 @@
                             {% endif %}
                             <p>
                                 <label for="id_meal">{{ menu.form.meal.label }} <span class="errors">{% for error in menu.form.meal.errors %} {{ error }} {% endfor %}</span></label>
-                                {{ menu.form.meal }}
+                                <div class="radio">{{ menu.form.meal }}</div>
                             </p>
                             <p>
                                 <label for="id_timeslot">{{ menu.form.timeslot.label }} <span class="errors">{% for error in menu.form.timeslot.errors %} {{ error }} {% endfor %}</span></label>
@@ -76,6 +71,7 @@
                     {% endif %}
                 {% endif %}
             {% endif %}
+
         </div>
     {% endfor %}
 {% endblock %}
