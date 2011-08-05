@@ -1,0 +1,32 @@
+{% extends "base.html" %}    
+{% block title %}- ORDER_TYPE Orders{% endblock %}
+{% block size %}large{% endblock %}
+
+{% block navigation %}
+
+    <ul>
+        <li><a href="{% url admin:index %}">Admin Panel</a></li>
+    </ul>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="order">
+        <div class="name">Abraham Al-Rajhi</div> 
+        <div class="meal">Tofu Burgers</div> 
+        <div class="allergies">No allergies</div> 
+        <div class="diet">No Pig</div> 
+        <div class="instructions">Go easy on the sauce, and don't burn the pork.</div> 
+        <div class="status">Confirmed</div> 
+        <div class="done">
+            <div class="buttons">
+                <button class="green thinandtall">
+                    <div><span>Done</span></div>
+                </button>
+            </div>
+        </div> 
+    </div>
+
+{% endblock %}
+

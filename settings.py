@@ -3,21 +3,11 @@ import socket
 import sys
 
 PROJECT_DIR = os.path.dirname(__file__)
-PROJECT_NAME = 'kitchen'
-STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, "static")
-
+STATIC_DOC_ROOT = os.path.join(PROJECT_DIR, 'static')
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG                               
-
-if socket.gethostname() != 'web152.webfaction.com':
-	LOCAL = True
-else:
-	LOCAL = False
-
-ADMINS = (
-	('', ''),
-)
-
+LOCAL = True
+ADMINS = (('someone', 'someone@something.com'),)
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -57,9 +47,9 @@ USE_L10N = True
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 if LOCAL:
-	MEDIA_ROOT = os.path.join(PROJECT_DIR, "static")
+	MEDIA_ROOT = os.path.join(PROJECT_DIR, 'static')
 else:
-	MEDIA_ROOT = ""
+	MEDIA_ROOT = ''
 	
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).

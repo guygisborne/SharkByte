@@ -15,8 +15,8 @@
                 <div id="nav" class="right">
                     {% block navigation %}
                     <ul>
-                        <li><a href="{% url menu.views.order %}">Order</a></li>
-                        <li><a href="{% url employee.views.editProfile %}">Profile</a></li>
+                        <li><a href="{% url menu.views.order_list %}">Order</a></li>
+                        <li><a href="{% url employee.views.edit_profile %}">Profile</a></li>
                         <li><a href="{% url employee.views.logout %}">Logout</a></li>
                     </ul>
                     {% endblock %}
@@ -35,4 +35,5 @@
 
     <script type="text/javascript" src="/static/javascripts/jquery.js"></script>
     <script type="text/javascript" src="/static/javascripts/main.js"></script>
+    {% block scripts %}{% endblock %}
 </html>

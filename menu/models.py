@@ -17,12 +17,12 @@ class Timeslot(models.Model):
 	time = models.TimeField(help_text='Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')  
 	capacity = models.PositiveIntegerField(blank=True, null=True, help_text='An optional limit of employees this timeslot can serve; leave blank to serve an unlimited number of employees.') 
 
-	def availableCountFor(menu, self):
+	def availableCountFor(self, menu):
 		from menu.models import Order 
-		usedSlots = len(Order.objects.filter(menu=menu, timeslot=self))
-		return self.capacity - usedSlots
+		used_slots = len(Order.objects.filter(menu=menu, timeslot=self))
+		return self.capacity - used_slots
 
-	def isAvailableFor(menu, self):
+	def isAvailableFor(self, menu):
 		if self.capacity:
 			return self.availableCountFor(menu) > 0
 		else:
@@ -33,6 +33,10 @@ class Timeslot(models.Model):
 			return u'{0} ({1} slot capacity)'.format(self.time, self.capacity)
 		else:
 			return u'{0}'.format(self.time)
+
+	def getFieldName(self, menu):
+		formatted_time = self.time.strftime('%I:%M %p')
+		return '{0} ({1} available slots)'.format(formatted_time, self.availableCountFor(menu))
 
 
 class Meal(models.Model):
@@ -45,25 +49,21 @@ class Meal(models.Model):
 
 class MenuManager(models.Manager):
 	def todaysMenus(self, employee):
-		todaysMenus = []
+		todays_menus = []
 
-		for type, typeName in MENU_TYPES:
-			menu = {
-				  'typeName': typeName
-				, 'menu': False
-				, 'order': False
-			}
+		for type, typename in MENU_TYPES:
+			menu = { 'typename': typename, 'menu': False, 'order': False }
 
 			try:
-				menu['menu'] = self.filter(type=type, publishDate=date.today())[0]
+				menu['menu'] = self.filter(type=type, publish_date=date.today())[0]
 			except IndexError: 
 				pass
 			else:
 				menu['order'] = menu['menu'].getOrderFor(employee)
 
-			todaysMenus.append(menu) 	
+			todays_menus.append(menu) 	
 
-		return todaysMenus
+		return todays_menus
 
 
 class Menu(models.Model):
@@ -71,9 +71,9 @@ class Menu(models.Model):
 	meals = models.ManyToManyField(Meal)
 	timeslots = models.ManyToManyField(Timeslot)
 	description = models.TextField(blank=True);
-	publishDate = models.DateField(help_text='The day this menu will be available for.')
-	publishTime = models.TimeField(blank=True, null=True, help_text='An optional time when this menu will be available at. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
-	endTime = models.TimeField(help_text='The time when this menu will expire and become unavailable. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
+	publish_date = models.DateField(help_text='The day this menu will be available for.')
+	publish_time = models.TimeField(blank=True, null=True, help_text='An optional time when this menu will be available at. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
+	end_time = models.TimeField(help_text='The time when this menu will expire and become unavailable. Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')
 
 	objects = models.Manager()
 	managed = MenuManager()
@@ -99,21 +99,22 @@ class Menu(models.Model):
 			return False
 
 	def isExpired(self):
-		return self.endTime < datetime.time(datetime.now())
+		return self.end_time < datetime.time(datetime.now())
 
 	def isPublishable(self):
-		isPublishable = (self.publishDate == date.today())
-		if self.publishTime:
-			return isPublishable and self.publishTime < datetime.time(datetime.now())
+		is_publishable = (self.publish_date == date.today())
+		if self.publish_time:
+			return is_publishable and self.publish_time < datetime.time(datetime.now())
 		else:
-			return isPublishable
+			return is_publishable
 
 	def __unicode__(self):
 		return self.get_type_display()
 
 	@models.permalink
-	def getPlaceURL(self):
-		return ('place', (), { 'menuID': self.pk })
+	def getCreateURL(self):
+		return ('place_order', (), { 'menu_id': self.pk })
+
 
 class Order(models.Model):
 	employee = models.ForeignKey(Employee)
@@ -121,18 +122,18 @@ class Order(models.Model):
 	meal = models.ForeignKey(Meal)
 	timeslot = models.ForeignKey(Timeslot)
 	instructions = models.TextField(blank=True)
-	isConfirmed = models.BooleanField(default=False) 
-	confirmedAt = models.DateTimeField(blank=True, null=True)
+	is_confirmed = models.BooleanField(default=False, editable=False) 
+	confirmed_at = models.DateTimeField(blank=True, null=True, editable=False)
 
 	def confirmableAt(self):
 		return self.timeslot.time - timedelta(minutes=20)
 
 	def isConfirmable(self):
-		return self.confirmableAt < datetime.time(datetime.now())
+		return self.confirmable_at < datetime.time(datetime.now())
 
 	def confirm(self):
-		self.isConfirmed = True
-		self.confirmedAt = datetime.now()
+		self.is_confirmed = True
+		self.confirmed_at = datetime.now()
 		super(Order, self).save()
 
 	def __unicode__(self):
@@ -140,9 +141,9 @@ class Order(models.Model):
 
 	@models.permalink
 	def getConfirmURL(self):
-		return ('confirm', (), { 'orderID': self.pk })
+		return ('confirm_order', (), { 'order_id': self.pk })
 
 	@models.permalink
 	def getCancelURL(self):
-		return ('cancel', (), { 'orderID': self.pk })
+		return ('cancel_order', (), { 'order_id': self.pk })
 

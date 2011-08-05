@@ -3,10 +3,10 @@ from django.conf.urls.defaults import *
 from views import *
 
 urlpatterns = patterns('menu.views',
-	url(r'^order/$', 'order', name='order'), 
-	url(r'^order/place/(?P<menuID>\d+)/$', 'placeOrder', name='place'), 
-	url(r'^order/confirm/(?P<orderID>\d+)/$', 'confirmOrder', name='confirm'), 
-	url(r'^order/cancel/(?P<orderID>\d+)/$', 'cancelOrder', name='cancel'), 
-	url(r'^menu-list/$', 'menuList', name='menu-list'), 
-	url(r'^order-list/(?P<menuID>\d+)/$', 'orderList', name='order-list'), 
+	  url(r'^order-list/$', 'order_list', name='order_list') 
+	, url(r'^order-list/create/(?P<menu_id>\d+)/$', 'create_order', name='create_order')
+	, url(r'^order-list/confirm/(?P<order_id>\d+)/$', 'confirm_order', name='confirm_order')
+	, url(r'^order-list/cancel/(?P<order_id>\d+)/$', 'cancel_order', name='cancel_order')
+	, url(r'^menu-list/$', 'menu_list', name='menu_list')
+	, url(r'^menu-list/(?P<menu_id>\d+)/$', 'orders_list', name='orders_list'),
 )

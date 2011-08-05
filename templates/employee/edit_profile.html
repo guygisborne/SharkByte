@@ -1,5 +1,4 @@
 {% extends "base.html" %}    
-
 {% block title %}- Editing Profile{% endblock %}
 {% block size %}medium{% endblock %}
 
@@ -12,14 +11,12 @@
     {% endif %}
 
     <div class="inner">
-
         <h2>Editing Profile</h2>
-
-        <form method="post" class="profile" action="{% url employee.views.editProfile %}">
+        <form method="post" class="profile" action="{% url employee.views.edit_profile %}">
             {% csrf_token %}   
             <p>
-                <label for="id_display_name">Display Name <span class="help_text">{{ employee_form.display_name.help_text }}</span></label>
-                {{ employee_form.display_name }}
+                <label for="id_full_name">Full Name <span class="errors">{% for error in employee_form.full_name.errors %} {{ error }} {% endfor %}</span></label>
+                {{ employee_form.full_name }}
             </p>
             <p>
                 <label for="id_allergies">List of Allergies <span class="errors">{% for error in employee_form.allergies.errors %} {{ error }} {% endfor %}</span></label>
@@ -34,12 +31,11 @@
                 {{ employee_form.diet }}
             </p>
             <div class="buttons">
-                <button type="submit" name="" value="" class="green thinandtall">
+                <button type="submit" class="green thinandtall">
                     <div><span>Save Changes</span></div>
                 </button>
             </div>
         </form>
-
     </div>
     
 {% endblock %}

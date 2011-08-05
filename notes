@@ -1,4 +1,0 @@
-check request.session['employeeID']
-
-
-check authentication on each site

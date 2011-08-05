@@ -1,5 +1,4 @@
 {% extends "base.html" %}    
-
 {% block title %}- Login to Order{% endblock %}
 {% block size %}small{% endblock %}
 {% block navigation %}{% endblock %}
@@ -9,15 +8,15 @@
     <form method="post" class="login inner" action="{% url employee.views.authenticate %}">
         {% csrf_token %}   
         <p>
-            <label for="id_username">Username <span class="errors">{% for error in login_form.username.errors %} {{ error }} {% endfor %}</span></label>
+            <label for="id_username">{{ login_form.username.label }} <span class="errors">{% for error in login_form.username.errors %} {{ error }} {% endfor %}</span></label>
             {{ login_form.username }}
         </p>
         <p>
-            <label for="id_password">Password <span class="errors">{% for error in login_form.password.errors %} {{ error }} {% endfor %}</span></label>
+            <label for="id_password">{{ login_form.password.label }} <span class="errors">{% for error in login_form.password.errors %} {{ error }} {% endfor %}</span></label>
             {{ login_form.password }}
         </p>
         <div class="buttons">
-            <button type="submit" name="" value="" class="green thinandtall">
+            <button type="submit" class="green thinandtall">
                 <div><span>Login</span></div>
             </button>
         </div>

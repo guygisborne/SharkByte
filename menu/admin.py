@@ -2,21 +2,21 @@ from django.contrib import admin
 
 from models import *
 
-class MealAdmin(admin.ModelAdmin):
-    list_display = ['name', 'description']
-
-
 class TimeslotAdmin(admin.ModelAdmin):
     list_display = ['time', 'capacity']
 
 
+class MealAdmin(admin.ModelAdmin):
+    list_display = ['name', 'description']
+
+
 class MenuAdmin(admin.ModelAdmin):
-	list_display = ['type', 'description']
+	list_display = ['type', 'description', 'publish_date']
 	filter_horizontal = ['meals', 'timeslots']
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['employee', 'meal', 'instructions', 'isConfirmed']
+    list_display = ['employee', 'meal', 'instructions', 'is_confirmed']
 
 
 admin.site.register(Timeslot, TimeslotAdmin)
