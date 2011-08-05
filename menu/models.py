@@ -113,7 +113,7 @@ class Menu(models.Model):
 
 	@models.permalink
 	def getCreateURL(self):
-		return ('place_order', (), { 'menu_id': self.pk })
+		return ('create_order', (), { 'menu_id': self.pk })
 
 
 class Order(models.Model):

@@ -7,10 +7,11 @@ from models import *
 class OrderForm(ModelForm):	
 	meal = forms.ModelChoiceField(label='Meal Choices', widget=RadioSelect, queryset=None, empty_label=None)
 	timeslot = forms.ModelChoiceField(label='Timeslots', widget=Select, queryset=None, empty_label=None)
-	instructions = forms.CharField(label='Special Instructions', widget=Textarea)
+	instructions = forms.CharField(label='Special Instructions', widget=Textarea, required=False)
 
 	def __init__(self, target_menu, *args, **kwargs):
 		super(OrderForm, self).__init__(*args, **kwargs)
+		self.target_menu = target_menu
 		self.fields['meal'].queryset = target_menu.meals
 		self.fields['timeslot'].queryset = target_menu.timeslots
 

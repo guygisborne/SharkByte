@@ -12,23 +12,29 @@ from decorators import *
 from employee.models import *
 
 @employee_required
-def order_list(request, prev_order=None, **kwargs):
+def order_list(request, prev_form=None, **kwargs):
 	menus = Menu.managed.todaysMenus(kwargs['employee'])
 	for menu in menus:
-		menu['form'] = (OrderForm(menu['menu'], instance=prev_order) if menu['menu'] else False)
+		if menu['menu']:
+			if prev_form and prev_form.target_menu == menu['menu']:
+				menu['form'] = prev_form
+			else:
+				menu['form'] = OrderForm(menu['menu'])
+		else:
+			menu['form'] = False
 	return render_to_response('order_list.html', { 'menus': menus }, context_instance=RequestContext(request))
 
 @employee_required
 @post_required('/menu/order-list/')
 def create_order(request, menu_id, **kwargs):
 	menu = get_object_or_404(Menu, pk=menu_id)
-	order = Order(employee=kwargs['employee'], menu=menu)
-	order_form = OrderForm(request.POST, instance=order)
+	new_order = Order(employee=kwargs['employee'], menu=menu)
+	order_form = OrderForm(menu, request.POST, instance=new_order)
 	if order_form.is_valid():
-		new_order = orderForm.save()
+		new_order = order_form.save()
 		return HttpResponseRedirect(reverse('order_list'))
 	else:
-		return order(request, order_form)
+		return order_list(request, order_form)
 
 @employee_required
 def confirm_order(request, order_id, **kwargs):
