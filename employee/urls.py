@@ -7,4 +7,5 @@ urlpatterns = patterns('employee.views',
 	, url(r'^logout/$', 'logout', name='logout')
 	, url(r'^authenticate/$', 'authenticate', name='authenticate')
 	, url(r'^edit-profile/$', 'edit_profile', name='edit_profile') 
+	, url(r'^edit-profile/save/$', 'save_profile', name='save_profile') 
 )

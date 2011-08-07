@@ -1,3 +1,5 @@
+from functools import wraps
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -14,15 +16,15 @@ def employee_required(view_fn):
 
 	return decorated
 
-def post_required(redirect_url):
+def post_required(url_name):
 	def decorator(view_fn):
 		def decorated(request, *args, **kwargs):
 			if request.method != 'POST':
-				return HttpResponseRedirect(redirect_url)
+				return HttpResponseRedirect(reverse(url_name))
 			else:
 				return view_fn(request, *args, **kwargs)
 
-		return decorated
+		return wraps(view_fn)(decorated)
 	
 	return decorator
 

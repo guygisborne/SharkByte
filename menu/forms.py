@@ -16,17 +16,14 @@ class OrderForm(ModelForm):
 		self.fields['meal'].queryset = target_menu.meals
 		self.fields['timeslot'].queryset = target_menu.timeslots
 		self.fields['timeslot'].validators = [self.valid_timeslot]
+		self.overwrite_choice_names('meal')
+		self.overwrite_choice_names('timeslot')
 
-		# gives each field a non '__unicode__' name (since it's dependant on the target_menu)
+	def overwrite_choice_names(self, field_name):
 		choices = []
-		for timeslot in self.fields['timeslot'].queryset.all():
-			choices.append((timeslot.pk, timeslot.getFieldName(target_menu)))
-		self.fields['timeslot'].choices = choices
-
-		choices = []
-		for meal in self.fields['meal'].queryset.all():
-			choices.append((meal.pk, meal.getFieldName()))
-		self.fields['meal'].choices = choices
+		for field_model in self.fields[field_name].queryset.all():
+			choices.append((field_model.pk, field_model.getFieldName(self.target_menu)))
+		self.fields[field_name].choices = choices
 
 	def valid_timeslot(self, timeslot):
 		if not timeslot.isAvailableFor(self.target_menu):

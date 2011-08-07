@@ -4,6 +4,12 @@
 
 {% block content %}
 
+    {% if success_message %}
+        <div class="success message">
+            {{ success_message|safe }}
+        </div>
+    {% endif %}
+
     {% for menu in menus %}
         <div class="menu inner division {% if menu.menu.isExpired %}expired{% endif %}">
             <h2>{{ menu.typename }} <span class="expiration">is Over!</span></h2>

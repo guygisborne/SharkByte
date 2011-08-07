@@ -1,9 +1,6 @@
 from datetime import datetime
 
 from django.db import models
-from django.contrib.auth.models import User
-from django.contrib.contenttypes import generic
-from django.contrib.contenttypes.models import ContentType
 
 class Employee(models.Model):
 	username = models.CharField(max_length=255, editable=False)

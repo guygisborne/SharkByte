@@ -6,9 +6,9 @@ from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib import auth
 
+from decorators import *
 from forms import *
 from models import *
-from decorators import *
 from employee.models import *
 
 @employee_required
@@ -25,7 +25,7 @@ def order_list(request, prev_form=None, **kwargs):
 	return render_to_response('order_list.html', { 'menus': menus }, context_instance=RequestContext(request))
 
 @employee_required
-@post_required('/menu/order-list/')
+@post_required('order_list')
 def create_order(request, menu_id, **kwargs):
 	menu = get_object_or_404(Menu, pk=menu_id)
 	new_order = Order(employee=kwargs['employee'], menu=menu)

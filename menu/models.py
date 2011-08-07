@@ -65,7 +65,7 @@ class Meal(models.Model):
 	def __unicode__(self):
 		return self.name
 
-	def getFieldName(self):
+	def getFieldName(self, menu):
 		return '{0} - {1}'.format(self.name, self.description)
 
 
