@@ -8,5 +8,5 @@ urlpatterns = patterns('menu.views',
 	, url(r'^order-list/confirm/(?P<order_id>\d+)/$', 'confirm_order', name='confirm_order')
 	, url(r'^order-list/cancel/(?P<order_id>\d+)/$', 'cancel_order', name='cancel_order')
 	, url(r'^menu-list/$', 'menu_list', name='menu_list')
-	, url(r'^menu-list/(?P<menu_id>\d+)/$', 'orders_list', name='orders_list'),
+	, url(r'^menu-list/(?P<menu_id>\d+)/$', 'orders_for_menu', name='orders_for_menu'),
 )

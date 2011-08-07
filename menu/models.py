@@ -12,6 +12,12 @@ MENU_TYPES = (
 	, ('d', 'dinner')
 )
 
+ORDER_STATE = (
+	  ('p', 'placed')
+	, ('c', 'confirmed')
+	, ('f', 'fulfilled')
+)
+
 CONFIRM_DELTA = 20
 
 class Timeslot(models.Model):
@@ -66,10 +72,8 @@ class Meal(models.Model):
 class MenuManager(models.Manager):
 	def todaysMenus(self, employee):
 		todays_menus = []
-
 		for type, typename in MENU_TYPES:
 			menu = { 'typename': typename, 'menu': False, 'order': False }
-
 			try:
 				menu['menu'] = self.filter(type=type, publish_date=date.today())[0]
 			except IndexError: 
@@ -78,8 +82,29 @@ class MenuManager(models.Manager):
 				menu['order'] = menu['menu'].getOrderFor(employee)
 
 			todays_menus.append(menu) 	
-
 		return todays_menus
+
+	def pastMenus(self, start_date=datetime.today(), count=15):
+		days = []
+		for i in xrange(count):
+			cur_date = start_date - timedelta(days=i)
+			name = date_filter(cur_date, 'F j, Y')
+			menus = []
+			for type, typename in MENU_TYPES:
+				menu_info = {}
+				try:
+					menu = self.filter(type=type, publish_date=cur_date)[0]
+				except IndexError:
+					pass
+				else:
+					menu_info['menu'] = menu
+					menu_info['placed_count'] = menu.getOrdersWithState('p', True)
+					menu_info['confirmed_count'] = menu.getOrdersWithState('c', True) 
+					menu_info['unfulfilled_count'] = menu_info['confirmed_count'] - menu.getOrdersWithState('f', True)
+					menus.append(menu_info)
+
+			days.append({ 'name': name, 'menus': menus })
+		return days
 
 
 class Menu(models.Model):
@@ -114,6 +139,18 @@ class Menu(models.Model):
 		else:
 			return False
 
+	def getOrdersWithState(self, state, count=False):
+		orders = Order.objects.filter(menu=self, state=state)
+		return (len(orders) if count else orders)
+
+	def getAllOrders(self):
+		orders = []
+		for state, statename in ORDER_STATE:
+			order = Order.objects.filter(menu=self, state=state).order_by('confirm_time')
+			if len(order) > 0:
+				orders.extend(order)
+		return orders
+
 	def isExpired(self):
 		return self.end_time < datetime.time(datetime.now())
 
@@ -138,8 +175,8 @@ class Order(models.Model):
 	meal = models.ForeignKey(Meal)
 	timeslot = models.ForeignKey(Timeslot)
 	instructions = models.TextField(blank=True)
-	is_confirmed = models.BooleanField(default=False, editable=False) 
-	confirmed_at = models.DateTimeField(blank=True, null=True, editable=False)
+	state = models.CharField(max_length=1, choices=ORDER_STATE, default='p', editable=False) 
+	confirm_time = models.DateTimeField(blank=True, null=True, editable=False)
 
 	def getConfirmableTime(self):
 		relative_time = datetime.combine(date.today(), self.timeslot.time)
@@ -153,8 +190,8 @@ class Order(models.Model):
 
 	def confirm(self):
 		if self.isConfirmable():
-			self.is_confirmed = True
-			self.confirmed_at = datetime.now()
+			self.state = 'c'
+			self.confirm_time = datetime.now()
 			super(Order, self).save()
 
 	def __unicode__(self):

@@ -51,9 +51,12 @@ def cancel_order(request, order_id, **kwargs):
 
 @staff_required
 def menu_list(request):
-	return render_to_response('menu_list.html', {}, context_instance=RequestContext(request))
+	days = Menu.managed.pastMenus()
+	return render_to_response('menu_list.html', { 'days': days }, context_instance=RequestContext(request))
 
 @staff_required
-def orders_list(request, menu_id):
-	return render_to_response('order_list.html', { 'menu_id': menu_id }, context_instance=RequestContext(request))
+def orders_for_menu(request, menu_id):
+	menu = get_object_or_404(Menu, pk=menu_id)
+	orders = menu.getAllOrders()
+	return render_to_response('orders_for_menu.html', { 'orders': orders }, context_instance=RequestContext(request))
 

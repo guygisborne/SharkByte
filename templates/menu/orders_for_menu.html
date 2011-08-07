@@ -1,0 +1,35 @@
+{% extends "base.html" %}    
+{% block title %}- ORDER_TYPE Orders{% endblock %}
+{% block size %}large{% endblock %}
+
+{% block navigation %}
+
+    <ul>
+        <li><a href="{% url admin:index %}">Admin Panel</a></li>
+    </ul>
+
+{% endblock %}
+
+{% block content %}
+
+    {% for order in orders %}
+        <div class="order">
+            <div class="name">{{ order.employee }}</div> 
+            <div class="timeslot">{{ order.timeslot }}</div> 
+            <div class="meal">{{ order.meal }}</div> 
+            <div class="instructions">{{ order.instructions }}</div> 
+            <div class="allergies">{{ order.employee.allergies }}</div> 
+            <div class="diet">{{ order.employee.diet }}</div> 
+            <div class="status">{{ order.get_state_display }}</div> 
+            <div class="done">
+                <div class="buttons">
+                    <button class="green thinandtall">
+                        <div><span>Done</span></div>
+                    </button>
+                </div>
+            </div> 
+        </div>
+    {% endfor %}
+
+{% endblock %}
+

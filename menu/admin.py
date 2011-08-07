@@ -16,7 +16,7 @@ class MenuAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['employee', 'meal', 'instructions', 'is_confirmed']
+    list_display = ['employee', 'meal', 'instructions', 'state']
 
 
 admin.site.register(Timeslot, TimeslotAdmin)

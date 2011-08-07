@@ -9,7 +9,7 @@ from models import *
 
 def login(request, prev_login_form=None):
 	if 'employee_id' in request.session:
-		reverse('order_list')
+		return HttpResponseRedirect(reverse('order_list'))
 	else:
 		login_form = (prev_login_form if prev_login_form else LoginForm())
 		return render_to_response('login.html', { 'login_form': login_form }, context_instance=RequestContext(request))

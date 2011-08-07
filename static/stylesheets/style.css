@@ -2,6 +2,7 @@
 body { background:#eee; font:normal 0.625em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; }
 strong { font-weight:bold; }
 em { font-style:italic; }
+.clear { clear:both; }
 
 #container { background:#fff; margin:20px auto; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.1); -moz-box-shadow:0 1px 3px rgba(0,0,0,0.1); -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.1); }
     #container.small { width:375px; }
@@ -15,7 +16,7 @@ em { font-style:italic; }
         #nav a { padding:14px; margin-top:-10px; margin-right:-12px; display:inline-block; font-size:1.3em; text-decoration:none; font-weight:bold; text-transform:uppercase; color:#aaa; }
         #nav a:hover { color:#6a8e80; }
 
-#content { }
+#content {}
     #content h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; margin-bottom:10px; }
     #content h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
     #content p { font-size:1.3em; line-height:1.667em; margin-bottom:16px; color:#333; }
@@ -33,15 +34,20 @@ em { font-style:italic; }
     .ordered .buttons button div { background-color:#eee; }
     .ordered .buttons button span { background-color:#eee; }
 
-.menu_link { display:block; text-decoration:none; }
-    .menu_link h2 { color:#000; line-height:0; margin-bottom:0 !important; }
-    .menu_link .meta { width:175px; float:right; color:#888; }
-    .menu_link .meta .count { float:left; }
-    .menu_link .meta .time { float:right; }
+.menu_link { overflow:auto; font-size:1.3em; display:block; text-decoration:none; margin-bottom:12px; }
+.menu_link:last-child { margin-bottom:0; }
+    .menu_link > div { display:inline-block; }
+    .menu_link .title { color:#333; font-size:1.571em; margin-top:6px; text-transform:capitalize; }
+    .menu_link .meta { float:right; }
+        .menu_link .meta .block { padding:0 12px; display:inline-block; text-align:center; }
+        .menu_link .meta .block span { font-weight:bold; font-size:1.571em; line-height:1.4em; display:block; }
+        .menu_link .meta .block.placed { color:#888; }
+        .menu_link .meta .block.confirmed { color:#6a8e80; }
+        .menu_link .meta .block.unfulfilled { color:#9A4444; }
 
 .order { display:block; }
 
-form { }
+form {}
     form p { display:block; margin-bottom:10px !important; }
     label { display:block; margin-bottom:2px; color:#666; }
     label span.help_text { float:right; color:#888; }

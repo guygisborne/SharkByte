@@ -12,33 +12,28 @@
 
 {% block content %}
 
-    <!-- replace with { menu.get_absolute_url } -->
-    <a href="/menu/order-list/3" class="menu_link division inner">
-        <h2>
-            Breakfast orders 
-            <div class="meta"><div class="count">23 Orders</div> <div class="time">General</div></div>
-        </h2>
-    </a>
+    {% for day in days %}
 
-    <a href="LINK_TO_ORDERS_LIST/MENU_ID" class="menu_link division inner">
-        <h2>
-            Lunch orders 
-            <div class="meta"><div class="count">13 Orders</div> <div class="time">6:45 PM</div></div>
-        </h2>
-    </a>
+        <div class="division inner">
+            <h2>{{ day.name }}</h2>
 
-    <a href="LINK_TO_ORDERS_LIST/MENU_ID" class="menu_link division inner">
-        <h2>
-            Lunch orders 
-            <div class="meta"><div class="count">18 Orders</div> <div class="time">5:45 PM</div></div>
-        </h2>
-    </a>
+            {% for menu_info in day.menus %}
+            <a href="{% url orders_for_menu menu_info.menu.pk %}" class="menu_link">
+                    <div class="meta">
+                        <div class="block placed"><span>{{ menu_info.placed_count }}</span> placed</div>
+                        <div class="block confirmed"><span>{{ menu_info.confirmed_count }}</span> confirmed</div>
+                        <div class="block unfulfilled"><span>{{ menu_info.unfulfilled_count }}</span> unfulfilled</div>
+                    </div>
+                    <div class="title">
+                        {{ menu_info.menu }} orders
+                    </div>
+                </a>
+            {% empty %}
+                nothing
+            {% endfor %}
+        </div>
 
-    <a href="LINK_TO_ORDERS_LIST/MENU_ID" class="menu_link division inner">
-        <h2>
-            Lunch orders 
-            <div class="meta"><div class="count">9 Orders</div> <div class="time">7:45 PM</div></div>
-        </h2>
-    </a>
+    {% endfor %}
 
 {% endblock %}
+

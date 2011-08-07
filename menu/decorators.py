@@ -14,16 +14,7 @@ def employee_required(view_fn):
 
 	return decorated
 
-def staff_required(view_fn):
-	def decorated(request, *args, **kwargs):
-		if not request.user.is_authenticated() or not request.user.is_staff:
-			return HttpResponseRedirect(reverse('admin:index'))
-		else:
-			return view_fn(request, *args, **kwargs)
-
-	return decorated
-
-def post_required(redirect_url): # change to url name
+def post_required(redirect_url):
 	def decorator(view_fn):
 		def decorated(request, *args, **kwargs):
 			if request.method != 'POST':
@@ -34,4 +25,13 @@ def post_required(redirect_url): # change to url name
 		return decorated
 	
 	return decorator
+
+def staff_required(view_fn):
+	def decorated(request, *args, **kwargs):
+		if not request.user.is_authenticated() or not request.user.is_staff:
+			return HttpResponseRedirect(reverse('admin:index'))
+		else:
+			return view_fn(request, *args, **kwargs)
+
+	return decorated
 
