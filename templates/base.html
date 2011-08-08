@@ -8,29 +8,8 @@
     </head>
 
     <body>                 
-        <div id="container" class="{% block size %}{% endblock %}">
-
-            <div id="header">
-
-                <div id="nav" class="right">
-                    {% block navigation %}
-                    <ul>
-                        <li><a href="{% url menu.views.order_list %}">Order</a></li>
-                        <li><a href="{% url employee.views.edit_profile %}">Profile</a></li>
-                        <li><a href="{% url employee.views.logout %}">Logout</a></li>
-                    </ul>
-                    {% endblock %}
-                </div>
-
-                <h1 id="logo">SharkBite</h1>
-
-            </div>
-
-            <div id="content">
-                {% block content %}{% endblock %}
-            </div>
-
-        </div>
+        {% block container %}
+        {% endblock %}
     </body>
 
     <script type="text/javascript" src="/static/javascripts/jquery.js"></script>

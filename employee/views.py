@@ -9,7 +9,7 @@ from models import *
 
 def login(request, prev_login_form=None):
 	if 'employee_id' in request.session:
-		HttpResponseRedirect(reverse('order_list'))
+		HttpResponseRedirect(reverse('todays_menu'))
 	login_form = (prev_login_form if prev_login_form else LoginForm())
 	return render_to_response('login.html', { 'login_form': login_form }, context_instance=RequestContext(request))
 
@@ -27,7 +27,7 @@ def authenticate(request):
 		employee = Employee.objects.get_or_create(username=login_form.cleaned_data['username'], defaults={ 'full_name': login_form.cleaned_data['full_name'] })
 		result = { 'employee_id': employee[0].pk, 'is_new': employee[1] }
 		request.session['employee_id'] = result['employee_id']
-		redirect_url = (reverse('edit_profile') if result['is_new'] else reverse('order_list'))
+		redirect_url = (reverse('edit_profile') if result['is_new'] else reverse('todays_menu'))
 		return HttpResponseRedirect(redirect_url)
 
 @employee_required
@@ -42,7 +42,7 @@ def save_profile(request, **kwargs):
 	if employee_form.is_valid():
 		employee_form.save()
 		request.session['success_message'] = '<strong>Saved!</strong> Your profile\'s changes have been recorded.'
-		return HttpResponseRedirect(reverse('order_list'))
+		return HttpResponseRedirect(reverse('todays_menu'))
 	else:
 		return edit_profile(request, employee_form)
 

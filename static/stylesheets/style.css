@@ -2,7 +2,9 @@
 body { background:#eee; font:normal 0.625em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; }
 strong { font-weight:bold; }
 em { font-style:italic; }
-.clear { clear:both; }
+h1 { font:bold 1.8em/1em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; margin-bottom:10px; }
+h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; margin-bottom:10px; }
+h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
 
 #container { background:#fff; margin:20px auto; border-radius:5px; -moz-border-radius:5px; -webkit-border-radius:5px; box-shadow:0 1px 3px rgba(0,0,0,0.1); -moz-box-shadow:0 1px 3px rgba(0,0,0,0.1); -webkit-box-shadow:0 1px 3px rgba(0,0,0,0.1); }
     #container.small { width:375px; }
@@ -17,8 +19,6 @@ em { font-style:italic; }
         #nav a:hover { color:#6a8e80; }
 
 #content {}
-    #content h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; margin-bottom:10px; }
-    #content h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
     #content p { font-size:1.3em; line-height:1.667em; margin-bottom:16px; color:#333; }
     .inner { padding:12px 20px; }
     .division { border-bottom:2px dashed #eee; }
@@ -45,8 +45,6 @@ em { font-style:italic; }
         .menu_link .meta .block.confirmed { color:#6a8e80; }
         .menu_link .meta .block.unfulfilled { color:#9A4444; }
 
-.order { display:block; }
-
 form {}
     form p { display:block; margin-bottom:10px !important; }
     label { display:block; margin-bottom:2px; color:#666; }
@@ -60,6 +58,36 @@ form {}
 
     .radio label { cursor:pointer; font-size:1.2em; line-height:1.667em; color:#333; margin-bottom:8px; }
     .radio input { width:auto; float:left; margin-top:5px; margin-right:8px; }
+
+
+/*
+ * Admin menu and order stles
+ */
+
+#full_page { position:absolute; background:#fff; top:0; bottom:0; left:0; right:0; }
+
+#controls { padding:12px 20px; overflow:auto; }
+    #controls h1 { margin-top:8px; margin-bottom:0; }
+    #controls .hidden { display:none; }
+    #controls .right { float:right; }
+
+.order { display:block; padding:0 12px; margin-top:-1px; border:1px solid #dedede; border-left:0; border-right:0; }
+    .order.selected { background:#f3f7c3; }
+    .order.placed .status {}
+    .order.confirmed .status {}
+    .order.fulfilled .status {}
+    .order.labels > div { font-weight:bold; }
+    .order > div { cursor:pointer; font-size:1.3em; display:inline-block; padding:12px 8px; border-right:1px dotted #dedede; }
+    .order > div:last-child { border-right:0; }
+    .order .name { width:12%; }
+    .order .state { width:5%; }
+    .order .timeslot { width:6%; }
+    .order .meal { width:12%; }
+    .order .instructions { width:18%; }
+    .order .allergies { width:18%; }
+    .order .diet { width:18%; }
+    .order .pk { display:none; }
+
 
 /*
  * Button styles ripped from http://www.m.grooveshark.com

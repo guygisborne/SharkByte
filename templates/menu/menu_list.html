@@ -1,4 +1,4 @@
-{% extends "base.html" %}    
+{% extends "admin.html" %}    
 {% block title %}- Menu List{% endblock %}
 {% block size %}medium{% endblock %}
 
@@ -18,7 +18,7 @@
             <h2>{{ day.name }}</h2>
 
             {% for menu_info in day.menus %}
-            <a href="{% url orders_for_menu menu_info.menu.pk %}" class="menu_link">
+            <a href="{% url order_list menu_info.menu.pk %}" class="menu_link">
                     <div class="meta">
                         <div class="block placed"><span>{{ menu_info.placed_count }}</span> placed</div>
                         <div class="block confirmed"><span>{{ menu_info.confirmed_count }}</span> confirmed</div>

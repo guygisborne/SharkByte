@@ -1,83 +1,43 @@
-{% extends "base.html" %}    
-{% block title %}- Place an Order{% endblock %}
-{% block size %}medium{% endblock %}
+{% extends "admin.html" %}    
+{% block title %}- {{ menu }} Orders{% endblock %}
 
 {% block content %}
 
-    {% if success_message %}
-        <div class="success message">
-            {{ success_message|safe }}
+    <input type="hidden" class="get_orders_url" value="{% url get_orders menu.pk %}" />
+    <input type="hidden" class="fulfill_orders_url" value="{% url fulfill_orders menu.pk %}" />
+
+    <div id="controls">
+        <div class="right">
+            <div class="buttons">
+                <button class="green thinandtall hidden">
+                    <div><span></span></div>
+                </button>
+                <button class="grey thinandtall">
+                    <div><span>Select orders to fulfill</span></div>
+                </button>
+            </div>
         </div>
-    {% endif %}
 
-    {% for menu in menus %}
-        <div class="menu inner division {% if menu.menu.isExpired %}expired{% endif %}">
-            <h2>{{ menu.typename }} <span class="expiration">is Over!</span></h2>
+        <h1>{{ menu.publish_date }} > {{ menu }} Orders</h1>
+    </div>
 
-            {% if not menu.menu %}
-                <p>A {{ menu.typename }} menu has yet to be posted.</p>
-            {% else %}
-                {% if not menu.menu.isPublishable %}
-                    <p>A {{ menu.typename }} menu will be published at <strong>{{ menu.menu.publish_time }}</strong> today.</p>
-                {% else %}
-                    {% if menu.order %}
+    <div class="order labels">
+        <div class="pk"></div>
+        <div class="name">Name</div> 
+        <div class="state">State</div> 
+        <div class="timeslot">Timeslot</div> 
+        <div class="meal">Meal Name</div> 
+        <div class="instructions">Instructions</div> 
+        <div class="allergies">Allergies</div> 
+        <div class="diet">Diet Preferences</div> 
+    </div>
 
-                        <div class="ordered">
-                            {% if menu.order.is_confirmed %}
-                                <h3>You confirmed your order for:</h3>
-                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
-                                <p>Your timeslot is <strong>{{ menu.order.timeslot.getFormattedTime }}</strong></p>
-                            {% else %}
-                                <h3>You ordered:</h3>
-                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
-                                <p><strong>Make sure you come back at {{ menu.order.confirmableAt }} to confirm your order</strong>, or your meal won't be prepared. In the meantime, you can still cancel and reorder.</p>
-                                <div class="buttons">
-                                    {% if menu.order.isConfirmable %}
-                                        <button class="green thinandtall" onclick="location.href='{{ menu.order.getConfirmURL }}'">
-                                            <div><span>Confirm Order</span></div>
-                                        </button>
-                                    {% else %}
-                                        <button class="inactive thinandtall">
-                                            <div><span>Confirm Order ({{ menu.order.confirmableAt }})</span></div>
-                                        </button>
-                                    {% endif %}
-                                    <button class="red thinandtall" onclick="location.href='{{ menu.order.getCancelURL }}'">
-                                        <div><span>Cancel Order</span></div>
-                                    </button>
-                                </div>
-                            {% endif %}
-                        </div>
+    <div class="order_list">
+        <!-- filled in with ajax responses from 'menu.views.get_orders' -->
+    </div>
 
-                    {% else %}
+{% endblock %}
 
-                        <form method="post" class="order" action="{{ menu.menu.getCreateURL }}">
-                            {% csrf_token %}
-                            {% if menu.menu.description %} 
-                                <p>{{ menu.menu.description }}</p> 
-                            {% endif %}
-                            <p>
-                                <label for="id_meal">{{ menu.form.meal.label }} <span class="errors">{% for error in menu.form.meal.errors %} {{ error }} {% endfor %}</span></label>
-                                <div class="radio">{{ menu.form.meal }}</div>
-                            </p>
-                            <p>
-                                <label for="id_timeslot">{{ menu.form.timeslot.label }} <span class="errors">{% for error in menu.form.timeslot.errors %} {{ error }} {% endfor %}</span></label>
-                                {{ menu.form.timeslot }}
-                            </p>
-                            <p>
-                                <label for="id_instructions">{{ menu.form.instructions.label }} <span class="errors">{% for error in menu.form.instructions.errors %} {{ error }} {% endfor %}</span></label>
-                                {{ menu.form.instructions }}
-                            </p>
-                            <div class="buttons">
-                                <button type="submit" class="green thinandtall">
-                                    <div><span>Place Order</span></div>
-                                </button>
-                            </div>
-                        </form>
-
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-
-        </div>
-    {% endfor %}
+{% block scripts %}
+    <script type="text/javascript" src="/static/javascripts/admin.js"></script>
 {% endblock %}

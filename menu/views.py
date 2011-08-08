@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.contrib import auth
+from django.utils import simplejson
 
 from decorators import *
 from forms import *
@@ -12,7 +13,7 @@ from models import *
 from employee.models import *
 
 @employee_required
-def order_list(request, prev_form=None, **kwargs):
+def todays_menu(request, prev_form=None, **kwargs):
 	menus = Menu.managed.todaysMenus(kwargs['employee'])
 	for menu in menus:
 		if menu['menu']:
@@ -22,32 +23,32 @@ def order_list(request, prev_form=None, **kwargs):
 				menu['form'] = OrderForm(menu['menu'])
 		else:
 			menu['form'] = False
-	return render_to_response('order_list.html', { 'menus': menus }, context_instance=RequestContext(request))
+	return render_to_response('todays_menu.html', { 'menus': menus }, context_instance=RequestContext(request))
 
 @employee_required
-@post_required('order_list')
+@post_required('todays_menu')
 def create_order(request, menu_id, **kwargs):
 	menu = get_object_or_404(Menu, pk=menu_id)
 	new_order = Order(employee=kwargs['employee'], menu=menu)
 	order_form = OrderForm(menu, request.POST, instance=new_order)
 	if order_form.is_valid():
 		new_order = order_form.save()
-		return HttpResponseRedirect(reverse('order_list'))
+		return HttpResponseRedirect(reverse('todays_menu'))
 	else:
-		return order_list(request, order_form)
+		return todays_menu(request, order_form)
 
 @employee_required
 def confirm_order(request, order_id, **kwargs):
 	order = get_object_or_404(Order, pk=order_id, employee=kwargs['employee'])
 	if order.isConfirmable():
 		order.confirm()
-	return HttpResponseRedirect(reverse('order_list'))
+	return HttpResponseRedirect(reverse('todays_menu'))
 
 @employee_required
 def cancel_order(request, order_id, **kwargs):
 	order = get_object_or_404(Order, pk=order_id, employee=kwargs['employee'])
 	order.delete()
-	return HttpResponseRedirect(reverse('order_list'))
+	return HttpResponseRedirect(reverse('todays_menu'))
 
 @staff_required
 def menu_list(request):
@@ -55,8 +56,31 @@ def menu_list(request):
 	return render_to_response('menu_list.html', { 'days': days }, context_instance=RequestContext(request))
 
 @staff_required
-def orders_for_menu(request, menu_id):
+def order_list(request, menu_id):
+	menu = get_object_or_404(Menu, pk=menu_id)
+	return render_to_response('order_list.html', { 'menu': menu }, context_instance=RequestContext(request))
+
+@staff_required
+def get_orders(request, menu_id):
 	menu = get_object_or_404(Menu, pk=menu_id)
 	orders = menu.getAllOrders()
-	return render_to_response('orders_for_menu.html', { 'orders': orders }, context_instance=RequestContext(request))
+	response = [json_order(order) for order in orders]
+	return HttpResponse(simplejson.dumps(response), mimetype='application/javascript')
+
+def json_order(order):
+	return {
+		  'pk': order.pk
+		, 'name': order.employee.__unicode__()
+		, 'state': order.get_state_display()
+		, 'timeslot': order.timeslot.getFormattedTime()
+		, 'meal': order.meal.__unicode__()
+		, 'instructions': order.instructions
+		, 'allergies': order.employee.allergies
+		, 'diet': order.employee.diet
+	}
+
+@staff_required
+@post_required('menu_list')
+def fulfill_orders(request, menu_id):
+	pass
 

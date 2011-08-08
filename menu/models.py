@@ -38,12 +38,6 @@ class Timeslot(models.Model):
 		else:
 			return True
 
-	def __unicode__(self):
-		if self.capacity:
-			return u'{0} ({1} slot capacity)'.format(self.getFormattedTime(), self.capacity)
-		else:
-			return u'{0} (unlimited)'.format(self.time)
-
 	def getFormattedTime(self):
 		relative_time = datetime.combine(date.today(), self.time)
 		return date_filter(relative_time, 'g:i a')
@@ -56,6 +50,12 @@ class Timeslot(models.Model):
 				return '{0} (unlimited)'.format(self.getFormattedTime(), self.availableCountFor(menu))
 		else:
 			return '{0} (FULL)'.format(self.getFormattedTime())
+
+	def __unicode__(self):
+		if self.capacity:
+			return u'{0} ({1} slot capacity)'.format(self.getFormattedTime(), self.capacity)
+		else:
+			return u'{0} (unlimited)'.format(self.time)
 
 
 class Meal(models.Model):

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block container %}
+
+    <div id="container" class="{% block size %}{% endblock %}">
+        <div id="header">
+            <div id="nav">
+                {% block navigation %}
+                    <ul>
+                        <li><a href="{% url todays_menu %}">Order</a></li>
+                        <li><a href="{% url edit_profile %}">Profile</a></li>
+                        <li><a href="{% url logout %}">Logout</a></li>
+                    </ul>
+                {% endblock %}
+            </div>
+            <h1 id="logo">SharkBite</h1>
+        </div>
+
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

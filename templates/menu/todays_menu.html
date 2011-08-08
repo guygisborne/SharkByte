@@ -1,0 +1,83 @@
+{% extends "client.html" %}    
+{% block title %}- Place an Order{% endblock %}
+{% block size %}medium{% endblock %}
+
+{% block content %}
+
+    {% if success_message %}
+        <div class="success message">
+            {{ success_message|safe }}
+        </div>
+    {% endif %}
+
+    {% for menu in menus %}
+        <div class="menu inner division {% if menu.menu.isExpired %}expired{% endif %}">
+            <h2>{{ menu.typename }} <span class="expiration">is Over!</span></h2>
+
+            {% if not menu.menu %}
+                <p>A {{ menu.typename }} menu has yet to be posted.</p>
+            {% else %}
+                {% if not menu.menu.isPublishable %}
+                    <p>A {{ menu.typename }} menu will be published at <strong>{{ menu.menu.publish_time }}</strong> today.</p>
+                {% else %}
+                    {% if menu.order %}
+
+                        <div class="ordered">
+                            {% if menu.order.is_confirmed %}
+                                <h3>You confirmed your order for:</h3>
+                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
+                                <p>Your timeslot is <strong>{{ menu.order.timeslot.getFormattedTime }}</strong></p>
+                            {% else %}
+                                <h3>You ordered:</h3>
+                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
+                                <p><strong>Make sure you come back at {{ menu.order.confirmableAt }} to confirm your order</strong>, or your meal won't be prepared. In the meantime, you can still cancel and reorder.</p>
+                                <div class="buttons">
+                                    {% if menu.order.isConfirmable %}
+                                        <button class="green thinandtall" onclick="location.href='{{ menu.order.getConfirmURL }}'">
+                                            <div><span>Confirm Order</span></div>
+                                        </button>
+                                    {% else %}
+                                        <button class="inactive thinandtall">
+                                            <div><span>Confirm Order ({{ menu.order.confirmableAt }})</span></div>
+                                        </button>
+                                    {% endif %}
+                                    <button class="red thinandtall" onclick="location.href='{{ menu.order.getCancelURL }}'">
+                                        <div><span>Cancel Order</span></div>
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    {% else %}
+
+                        <form method="post" class="order" action="{{ menu.menu.getCreateURL }}">
+                            {% csrf_token %}
+                            {% if menu.menu.description %} 
+                                <p>{{ menu.menu.description }}</p> 
+                            {% endif %}
+                            <p>
+                                <label for="id_meal">{{ menu.form.meal.label }} <span class="errors">{% for error in menu.form.meal.errors %} {{ error }} {% endfor %}</span></label>
+                                <div class="radio">{{ menu.form.meal }}</div>
+                            </p>
+                            <p>
+                                <label for="id_timeslot">{{ menu.form.timeslot.label }} <span class="errors">{% for error in menu.form.timeslot.errors %} {{ error }} {% endfor %}</span></label>
+                                {{ menu.form.timeslot }}
+                            </p>
+                            <p>
+                                <label for="id_instructions">{{ menu.form.instructions.label }} <span class="errors">{% for error in menu.form.instructions.errors %} {{ error }} {% endfor %}</span></label>
+                                {{ menu.form.instructions }}
+                            </p>
+                            <div class="buttons">
+                                <button type="submit" class="green thinandtall">
+                                    <div><span>Place Order</span></div>
+                                </button>
+                            </div>
+                        </form>
+
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+        </div>
+    {% endfor %}
+{% endblock %}
