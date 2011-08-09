@@ -32,7 +32,7 @@ def create_order(request, menu_id, **kwargs):
 	new_order = Order(employee=kwargs['employee'], menu=menu)
 	order_form = OrderForm(menu, request.POST, instance=new_order)
 	if order_form.is_valid():
-		new_order = order_form.save()
+		order_form.save()
 		return HttpResponseRedirect(reverse('todays_menu'))
 	else:
 		return todays_menu(request, order_form)
@@ -82,5 +82,19 @@ def json_order(order):
 @staff_required
 @post_required('menu_list')
 def fulfill_orders(request, menu_id):
-	pass
+	order_ids = simplejson.loads(request.POST['order_ids'])
+	orders = [order_from_id(order_id) for order_id in order_ids]
+	response = [change_order_state(order) if order else False for order in orders]
+	return HttpResponse(simplejson.dumps(response), mimetype='application/javascript')
+
+def order_from_id(order_id):
+	try:
+		return Order.objects.get(pk=order_id)
+	except DoesNotExist:
+		return False
+	
+def change_order_state(order):
+	order.state = 'f'
+	order.save()
+	return order.pk
 

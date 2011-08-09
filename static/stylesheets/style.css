@@ -45,7 +45,7 @@ h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial;
         .menu_link .meta .block.confirmed { color:#6a8e80; }
         .menu_link .meta .block.unfulfilled { color:#9A4444; }
 
-form {}
+form { display:block; }
     form p { display:block; margin-bottom:10px !important; }
     label { display:block; margin-bottom:2px; color:#666; }
     label span.help_text { float:right; color:#888; }

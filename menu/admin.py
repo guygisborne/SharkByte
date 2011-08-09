@@ -11,7 +11,7 @@ class MealAdmin(admin.ModelAdmin):
 
 
 class MenuAdmin(admin.ModelAdmin):
-	list_display = ['type', 'description', 'publish_date']
+	list_display = ['type', 'description', 'publish_date', 'publish_time', 'end_time']
 	filter_horizontal = ['meals', 'timeslots']
 
 

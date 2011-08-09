@@ -6,6 +6,14 @@ function getButton(color) {
     return $('.' + color, '#controls .buttons');
 } 
 
+function getOrder(pk) {
+    return $('#order_' + pk);
+}
+
+function setOrderSelect(order_ids, toggle) {
+    // set the select state of the array of order_ids
+}
+
 function buttonActive(active) {
     active ? getButton('green').removeClass('hidden')
            : getButton('green').addClass('hidden');
@@ -27,6 +35,7 @@ function displayOrders(orders) {
     for (i = 0; i < orders.length; i++) {
         order = orders[i];
         order_tag = $(template).clone();
+        order_tag.attr('id', 'order_' + order['pk']);
         for (property in order) {
             $('.' + property, order_tag).html(order[property]);
         }
@@ -49,6 +58,21 @@ function requestOrders() {
     }, REQUEST_INTERVAL);
 }
 
+function fulfillOrders(order_ids) {
+    $.ajax({
+          'url': FULFILL_ORDERS_URL
+        , 'type': 'post'
+        , 'data': { 'order_ids': JSON.stringify(order_ids) }
+        , 'dataType': 'json'
+        , 'success': function(response) {
+            console.log('success', typeof response, response);
+        }
+        , 'error': function(response) {
+            console.log('error', typeof response, response);
+        }
+    });
+}
+
 $('.order', '.order_list').live('click', function() {
     $(this).toggleClass('selected');
     var selected = $('.order.selected');
@@ -66,10 +90,49 @@ getButton('green').click(function() {
         order_ids.push(order_id);
     }
 
-    // send ajax request to change orders -- give needed data (array of pk's?)     
+    fulfillOrders(order_ids);
 });
 
 $(document).ready(function() {
     requestOrders();
 });
 
+
+
+// some crap
+$(document).ajaxSend(function(event, xhr, settings) {
+function getCookie(name) {
+var cookieValue = null;
+if (document.cookie && document.cookie != '') {
+var cookies = document.cookie.split(';');
+for (var i = 0; i < cookies.length; i++) {
+var cookie = jQuery.trim(cookies[i]);
+
+if (cookie.substring(0, name.length + 1) == (name + '=')) {
+cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+break;
+}
+}
+}
+return cookieValue;
+}
+function sameOrigin(url) {
+
+var host = document.location.host; // host + port
+var protocol = document.location.protocol;
+var sr_origin = '//' + host;
+var origin = protocol + sr_origin;
+
+return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+(url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+
+!(/^(\/\/|http:|https:).*/.test(url));
+}
+function safeMethod(method) {
+return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+}
+});

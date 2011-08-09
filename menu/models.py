@@ -26,84 +26,78 @@ class Timeslot(models.Model):
 
 	def availableCountFor(self, menu):
 		from menu.models import Order 
-		if self.capacity:
+		if self.capacity != None:
 			used_slots = len(Order.objects.filter(menu=menu, timeslot=self))
 			return self.capacity - used_slots
-		else:
-			return 0
 
 	def isAvailableFor(self, menu):
-		if self.capacity:
-			return self.availableCountFor(menu) > 0
-		else:
-			return True
+		return (self.availableCountFor(menu) > 0 if self.capacity != None else True)
 
 	def getFormattedTime(self):
 		relative_time = datetime.combine(date.today(), self.time)
 		return date_filter(relative_time, 'g:i a')
 
 	def getFieldName(self, menu):
+		field_name = self.getFormattedTime()
 		if self.isAvailableFor(menu):
-			if self.capacity:
-				return '{0} ({1} available slots)'.format(self.getFormattedTime(), self.availableCountFor(menu))
+			if self.capacity != None:
+				field_name = '{0} ({1} available slots)'.format(field_name, self.availableCountFor(menu))
 			else:
-				return '{0} (unlimited)'.format(self.getFormattedTime(), self.availableCountFor(menu))
+				field_name = '{0} (unlimited)'.format(field_name)
 		else:
-			return '{0} (FULL)'.format(self.getFormattedTime())
+			field_name = '{0} (FULL)'.format(field_name)
+		return field_name
 
 	def __unicode__(self):
-		if self.capacity:
+		if self.capacity != None:
 			return u'{0} ({1} slot capacity)'.format(self.getFormattedTime(), self.capacity)
 		else:
-			return u'{0} (unlimited)'.format(self.time)
+			return u'{0} (unlimited)'.format(self.getFormattedTime())
 
 
 class Meal(models.Model):
 	name = models.CharField(max_length=255)
 	description = models.TextField()
 
-	def __unicode__(self):
-		return self.name
-
 	def getFieldName(self, menu):
 		return '{0} - {1}'.format(self.name, self.description)
 
+	def __unicode__(self):
+		return self.name
+
+def tryGetMenu(type, publish_date):
+	try:
+		menu = Menu.objects.filter(type=type, publish_date=publish_date)[0]
+	except IndexError:
+		return False
+	else:
+		return menu
 
 class MenuManager(models.Manager):
 	def todaysMenus(self, employee):
 		todays_menus = []
 		for type, typename in MENU_TYPES:
-			menu = { 'typename': typename, 'menu': False, 'order': False }
-			try:
-				menu['menu'] = self.filter(type=type, publish_date=date.today())[0]
-			except IndexError: 
-				pass
-			else:
-				menu['order'] = menu['menu'].getOrderFor(employee)
-
-			todays_menus.append(menu) 	
+			menu = tryGetMenu(type, date.today())
+			order = (menu.getOrderFor(employee) if menu else False)
+			todays_menus.append({ 'typename': typename, 'menu': menu, 'order': order }) 	
 		return todays_menus
 
 	def pastMenus(self, start_date=datetime.today(), count=15):
 		days = []
 		for i in xrange(count):
-			cur_date = start_date - timedelta(days=i)
-			name = date_filter(cur_date, 'F j, Y')
+			curdate = start_date - timedelta(days=i)
+			datename = date_filter(curdate, 'F j, Y')
 			menus = []
 			for type, typename in MENU_TYPES:
-				menu_info = {}
-				try:
-					menu = self.filter(type=type, publish_date=cur_date)[0]
-				except IndexError:
-					pass
-				else:
-					menu_info['menu'] = menu
-					menu_info['placed_count'] = menu.getOrdersWithState('p', True)
-					menu_info['confirmed_count'] = menu.getOrdersWithState('c', True) 
-					menu_info['unfulfilled_count'] = menu_info['confirmed_count'] - menu.getOrdersWithState('f', True)
-					menus.append(menu_info)
-
-			days.append({ 'name': name, 'menus': menus })
+				menu = tryGetMenu(type, curdate)
+				if menu:
+					menus.append({
+						  'menu': menu
+						, 'placed_count': menu.getOrdersWithState('p')
+						, 'confirmed_count': menu.getOrdersWithState('c') 
+						, 'unfulfilled_count': menu.getOrdersWithState('c') - menu.getOrdersWithState('f')
+					})
+			days.append({ 'datename': datename, 'menus': menus })
 		return days
 
 
@@ -129,24 +123,24 @@ class Menu(models.Model):
 
 	def hasOrderFor(self, employee):
 		from menu.models import Order
-		orders = Order.objects.filter(employee=employee, menu=self)
+		orders = Order.objects.filter(menu=self, employee=employee)
 		return len(orders) > 0
 
 	def getOrderFor(self, employee):
 		from menu.models import Order
 		if self.hasOrderFor(employee):
-			return Order.objects.get(employee=employee, menu=self)
+			return Order.objects.get(menu=self, employee=employee)
 		else:
 			return False
 
-	def getOrdersWithState(self, state, count=False):
-		orders = Order.objects.filter(menu=self, state=state)
+	def getOrdersWithState(self, state, count=True):
+		orders = Order.objects.filter(menu=self, state=state).order_by('confirm_time')
 		return (len(orders) if count else orders)
 
 	def getAllOrders(self):
 		orders = []
 		for state, statename in ORDER_STATE:
-			order = Order.objects.filter(menu=self, state=state).order_by('confirm_time')
+			order = self.getOrdersWithState(state, False)
 			if len(order) > 0:
 				orders.extend(order)
 		return orders
@@ -155,18 +149,14 @@ class Menu(models.Model):
 		return self.end_time < datetime.time(datetime.now())
 
 	def isPublishable(self):
-		is_publishable = (self.publish_date == date.today())
+		publishable_today = (self.publish_date == date.today())
 		if self.publish_time:
-			return is_publishable and self.publish_time < datetime.time(datetime.now())
+			return publishable_today and self.publish_time < datetime.time(datetime.now())
 		else:
-			return is_publishable
+			return publishable_today
 
 	def __unicode__(self):
 		return self.get_type_display()
-
-	@models.permalink
-	def getCreateURL(self):
-		return ('create_order', (), { 'menu_id': self.pk })
 
 
 class Order(models.Model):
@@ -182,7 +172,7 @@ class Order(models.Model):
 		relative_time = datetime.combine(date.today(), self.timeslot.time)
 		return relative_time - timedelta(minutes=CONFIRM_DELTA)
 
-	def confirmableAt(self):
+	def confirmableTimeString(self):
 		return date_filter(self.getConfirmableTime(), 'g:i a')
 
 	def isConfirmable(self):
@@ -193,15 +183,10 @@ class Order(models.Model):
 			self.state = 'c'
 			self.confirm_time = datetime.now()
 			super(Order, self).save()
+			return True
+		return False
 
 	def __unicode__(self):
 		return '{0} ordered {1}'.format(self.employee, self.meal)
 
-	@models.permalink
-	def getConfirmURL(self):
-		return ('confirm_order', (), { 'order_id': self.pk })
-
-	@models.permalink
-	def getCancelURL(self):
-		return ('cancel_order', (), { 'order_id': self.pk })
 

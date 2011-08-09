@@ -15,7 +15,7 @@
     {% for day in days %}
 
         <div class="division inner">
-            <h2>{{ day.name }}</h2>
+            <h2>{{ day.datename }}</h2>
 
             {% for menu_info in day.menus %}
             <a href="{% url order_list menu_info.menu.pk %}" class="menu_link">

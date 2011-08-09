@@ -23,25 +23,25 @@
                     {% if menu.order %}
 
                         <div class="ordered">
-                            {% if menu.order.is_confirmed %}
+                            {% if menu.order.state == 'c' %}
                                 <h3>You confirmed your order for:</h3>
                                 <p><em>{{ menu.order.meal.getFieldName }}</em></p>
                                 <p>Your timeslot is <strong>{{ menu.order.timeslot.getFormattedTime }}</strong></p>
                             {% else %}
                                 <h3>You ordered:</h3>
                                 <p><em>{{ menu.order.meal.getFieldName }}</em></p>
-                                <p><strong>Make sure you come back at {{ menu.order.confirmableAt }} to confirm your order</strong>, or your meal won't be prepared. In the meantime, you can still cancel and reorder.</p>
+                                <p><strong>Make sure you come back at {{ menu.order.confirmableTimeString }} to confirm your order</strong>, or your meal won't be prepared. In the meantime, you can still cancel and reorder.</p>
                                 <div class="buttons">
                                     {% if menu.order.isConfirmable %}
-                                        <button class="green thinandtall" onclick="location.href='{{ menu.order.getConfirmURL }}'">
+                                        <button class="green thinandtall" onclick="location.href='{% url confirm_order menu.menu.pk menu.order.pk %}'">
                                             <div><span>Confirm Order</span></div>
                                         </button>
                                     {% else %}
                                         <button class="inactive thinandtall">
-                                            <div><span>Confirm Order ({{ menu.order.confirmableAt }})</span></div>
+                                            <div><span>Confirm Order ({{ menu.order.confirmableTimeString }})</span></div>
                                         </button>
                                     {% endif %}
-                                    <button class="red thinandtall" onclick="location.href='{{ menu.order.getCancelURL }}'">
+                                    <button class="red thinandtall" onclick="location.href='{% url cancel_order menu.menu.pk menu.order.pk %}'">
                                         <div><span>Cancel Order</span></div>
                                     </button>
                                 </div>
@@ -50,7 +50,7 @@
 
                     {% else %}
 
-                        <form method="post" class="order" action="{{ menu.menu.getCreateURL }}">
+                        <form method="post" action="{% url create_order menu.menu.pk %} ">
                             {% csrf_token %}
                             {% if menu.menu.description %} 
                                 <p>{{ menu.menu.description }}</p> 
