@@ -3,6 +3,7 @@ from datetime import date, time, datetime, timedelta
 from django.db import models
 from django.contrib.contenttypes import generic
 from django.template.defaultfilters import date as date_filter
+from django.template.defaultfilters import timeuntil
 
 from employee.models import Employee
 
@@ -80,7 +81,7 @@ class MenuManager(models.Manager):
 		for type, typename in MENU_TYPES:
 			menu = tryGetMenu(type, date.today())
 			order = (menu.getOrderFor(employee) if menu else False)
-			todays_menus.append({ 'typename': typename, 'menu': menu, 'order': order }) 	
+			todays_menus.append({ 'typename': typename.capitalize(), 'menu': menu, 'order': order }) 	
 		return todays_menus
 
 	def pastMenus(self, start_date=datetime.today(), count=15):
@@ -148,6 +149,9 @@ class Menu(models.Model):
 			if len(order) > 0:
 				orders.extend(order)
 		return orders
+
+	def getTimeuntilEnd(self):
+		return timeuntil(datetime.combine(date.today(), self.end_time))
 
 	def isExpired(self):
 		return self.end_time < datetime.time(datetime.now())

@@ -20,7 +20,7 @@ h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial;
 
 #content {}
     #content p { font-size:1.3em; line-height:1.667em; margin-bottom:16px; color:#333; }
-    .inner { padding:12px 20px; }
+    #content .inner { padding:12px 20px; }
     .division { border-bottom:2px dashed #eee; }
     .division:last-child { border-bottom:none; }
     .success { font-size:1.2em; color:rgba(0,0,0,0.6); padding:12px 20px; background:rgba(145, 200, 74, 0.2); display:none; }
@@ -28,7 +28,7 @@ h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial;
 .menu {}
     .menu:last-child { border-bottom:none; }
     .menu .expiration { display:none; }
-    .menu .end_time { float:right; color:#bcbcbc; font-weight:normal; text-transform:lowercase; }
+    .menu .end_time { float:right; color:#bcbcbc; font-weight:normal; text-transform:none; }
     .menu.expired form {}
     .menu.expired .expiration { display:inline; }
     .menu.expired .end_time { display:none; }
@@ -52,7 +52,7 @@ form { display:block; }
 
 
 /*
- * Admin menu and order stles
+ * Admin menu and order styles
  */
 
 #full_page { position:absolute; background:#fff; top:0; bottom:0; left:0; right:0; }
@@ -84,15 +84,16 @@ form { display:block; }
     .order .diet { width:18%; }
     .order .pk { display:none; }
 
-.menu_list { width:500px; margin:0 auto; }
+.day { width:100%; border-bottom:1px solid #dedede; }
+    .day .inner { width:475px; margin:0 auto; }
 
-.menu_link { overflow:auto; font-size:1.3em; display:block; text-decoration:none; margin-bottom:12px; }
+.menu_link { margin-bottom:12px; overflow:auto; font-size:1.3em; display:block; text-decoration:none; }
 .menu_link:last-child { margin-bottom:0; }
     .menu_link > div { display:inline-block; }
-    .menu_link .title { color:#333; font-size:1.571em; margin-top:6px; text-transform:capitalize; }
+    .menu_link .title { color:#333; font-size:1.3em; margin-top:6px; text-transform:capitalize; }
     .menu_link .meta { float:right; }
-        .menu_link .meta .block { padding:0 12px; display:inline-block; text-align:center; }
-        .menu_link .meta .block span { font-weight:bold; font-size:1.571em; line-height:1.4em; display:block; }
+        .menu_link .meta .block { padding:0 12px; font-size:1em; display:inline-block; text-align:center; }
+        .menu_link .meta .block span { font-weight:bold; }
         .menu_link .meta .block.placed { color:#888; }
         .menu_link .meta .block.confirmed { color:#6a8e80; }
         .menu_link .meta .block.unfulfilled { color:#9A4444; }

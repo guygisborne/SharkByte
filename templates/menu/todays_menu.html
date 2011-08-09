@@ -12,7 +12,7 @@
 
     {% for menu_info in menus %}
         <div class="menu inner division {% if menu_info.menu.isExpired %}expired{% endif %}">
-            <h2>{{ menu_info.typename }} <span class="expiration">has ended</span> <span class="end_time">Ends in {{ menu_info.menu.end_time }}</span></h2>
+            <h2>{{ menu_info.typename }} <span class="expiration">has ended</span> <span class="end_time">Ends at {{ menu_info.menu.end_time }}</span></h2>
 
             {% if not menu_info.menu %}
                 <p>A {{ menu_info.typename }} menu has yet to be posted.</p>
