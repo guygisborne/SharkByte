@@ -13,7 +13,6 @@ class LoginForm(forms.Form):
 		if not ldap_result: 
 			self._errors['username'] = self.error_class(['Username and password don\'t match'])
 		else:
-			self.cleaned_data['username'] = ldap_result['username']
 			self.cleaned_data['full_name'] = ldap_result['full_name']
 
 	def clean(self, *args, **kwargs):

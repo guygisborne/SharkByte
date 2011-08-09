@@ -10,70 +10,95 @@
         </div>
     {% endif %}
 
-    {% for menu in menus %}
-        <div class="menu inner division {% if menu.menu.isExpired %}expired{% endif %}">
-            <h2>{{ menu.typename }} <span class="expiration">is Over!</span></h2>
+    {% for menu_info in menus %}
+        <div class="menu inner division {% if menu_info.menu.isExpired %}expired{% endif %}">
+            <h2>{{ menu_info.typename }} <span class="expiration">has ended</span> <span class="end_time">Ends in {{ menu_info.menu.end_time }}</span></h2>
 
-            {% if not menu.menu %}
-                <p>A {{ menu.typename }} menu has yet to be posted.</p>
+            {% if not menu_info.menu %}
+                <p>A {{ menu_info.typename }} menu has yet to be posted.</p>
             {% else %}
-                {% if not menu.menu.isPublishable %}
-                    <p>A {{ menu.typename }} menu will be published at <strong>{{ menu.menu.publish_time }}</strong> today.</p>
+                {% if not menu_info.menu.isPublishable %}
+                    <p>A {{ menu_info.typename }} menu will be published at <strong>{{ menu_info.menu.publish_time }}</strong> today.</p>
                 {% else %}
-                    {% if menu.order %}
-
-                        <div class="ordered">
-                            {% if menu.order.state == 'c' %}
-                                <h3>You confirmed your order for:</h3>
-                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
-                                <p>Your timeslot is <strong>{{ menu.order.timeslot.getFormattedTime }}</strong></p>
-                            {% else %}
-                                <h3>You ordered:</h3>
-                                <p><em>{{ menu.order.meal.getFieldName }}</em></p>
-                                <p><strong>Make sure you come back at {{ menu.order.confirmableTimeString }} to confirm your order</strong>, or your meal won't be prepared. In the meantime, you can still cancel and reorder.</p>
-                                <div class="buttons">
-                                    {% if menu.order.isConfirmable %}
-                                        <button class="green thinandtall" onclick="location.href='{% url confirm_order menu.menu.pk menu.order.pk %}'">
-                                            <div><span>Confirm Order</span></div>
-                                        </button>
+                    {% if menu_info.menu.isExpired %}
+                        <p>{{ menu_info.typename }} ended at <strong>{{ menu_info.menu.end_time }}</strong> today. You missed out on {{ menu_info.menu.meals }}</p>
+                    {% else %}
+                        {% if menu_info.order %}
+                            <div class="ordered">
+                                <h3>
+                                    {% if menu_info.order.state == 'c' %}
+                                        <h3>Order confirmed</h3>
                                     {% else %}
-                                        <button class="inactive thinandtall">
-                                            <div><span>Confirm Order ({{ menu.order.confirmableTimeString }})</span></div>
-                                        </button>
+                                        <h3>Order placed</h3>
                                     {% endif %}
-                                    <button class="red thinandtall" onclick="location.href='{% url cancel_order menu.menu.pk menu.order.pk %}'">
-                                        <div><span>Cancel Order</span></div>
+                                </h3>
+                                {% if menu_info.order.state == 'c' %}
+                                    <p>Your order has been marked as <em>confirmed</em> and has been queued up for preparation.</p>
+                                {% endif %}
+                                <p>
+                                    <strong>You ordered:</strong><br/>
+                                    {{ menu_info.order.meal.getFieldName }}
+                                </p>
+                                <p>
+                                    <strong>Your instructions are to:</strong><br/>
+                                    {% if menu_info.order.instructions %}
+                                        {{ menu_info.order.instructions }}
+                                    {% else %}
+                                        Do nothing special
+                                    {% endif %}
+                                </p>
+                                <p>
+                                    <strong>Your timeslot is:</strong><br/>
+                                    {{ menu_info.order.timeslot.getFormattedTime }}
+                                </p>
+
+                                {% if menu_info.order.state == 'p' %}
+                                    <p>
+                                        <strong>Your order HAS NOT been confirmed:</strong><br/>
+                                        Make sure you come back after <strong>{{ menu_info.order.confirmableTimeString }}</strong> to confirm your order, or your meal <em>will not</em> be prepared. In the meantime, you can still cancel and reorder.
+                                    </p>
+
+                                    <div class="buttons">
+                                        {% if menu_info.order.isConfirmable %}
+                                            <button class="green thinandtall" onclick="location.href='{% url confirm_order menu_info.order.pk %}'">
+                                                <div><span>Confirm Order</span></div>
+                                            </button>
+                                        {% else %}
+                                            <button class="inactive thinandtall">
+                                                <div><span>Confirm Order @ {{ menu_info.order.confirmableTimeString }}</span></div>
+                                            </button>
+                                        {% endif %}
+                                        <button class="red thinandtall" onclick="location.href='{% url cancel_order menu_info.order.pk %}'">
+                                            <div><span>Cancel Order</span></div>
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <form method="post" action="{% url create_order menu_info.menu.pk %} ">
+                                {% csrf_token %}
+                                {% if menu_info.menu.description %} 
+                                    <p>{{ menu_info.menu.description }}</p> 
+                                {% endif %}
+                                <p>
+                                    <label for="id_meal">{{ menu_info.form.meal.label }} <span class="errors">{% for error in menu_info.form.meal.errors %} {{ error }} {% endfor %}</span></label>
+                                    <div class="radio">{{ menu_info.form.meal }}</div>
+                                </p>
+                                <p>
+                                    <label for="id_timeslot">{{ menu_info.form.timeslot.label }} <span class="errors">{% for error in menu_info.form.timeslot.errors %} {{ error }} {% endfor %}</span></label>
+                                    {{ menu_info.form.timeslot }}
+                                </p>
+                                <p>
+                                    <label for="id_instructions">{{ menu_info.form.instructions.label }} <span class="errors">{% for error in menu_info.form.instructions.errors %} {{ error }} {% endfor %}</span></label>
+                                    {{ menu_info.form.instructions }}
+                                </p>
+                                <div class="buttons">
+                                    <button type="submit" class="green thinandtall">
+                                        <div><span>Place Order</span></div>
                                     </button>
                                 </div>
-                            {% endif %}
-                        </div>
-
-                    {% else %}
-
-                        <form method="post" action="{% url create_order menu.menu.pk %} ">
-                            {% csrf_token %}
-                            {% if menu.menu.description %} 
-                                <p>{{ menu.menu.description }}</p> 
-                            {% endif %}
-                            <p>
-                                <label for="id_meal">{{ menu.form.meal.label }} <span class="errors">{% for error in menu.form.meal.errors %} {{ error }} {% endfor %}</span></label>
-                                <div class="radio">{{ menu.form.meal }}</div>
-                            </p>
-                            <p>
-                                <label for="id_timeslot">{{ menu.form.timeslot.label }} <span class="errors">{% for error in menu.form.timeslot.errors %} {{ error }} {% endfor %}</span></label>
-                                {{ menu.form.timeslot }}
-                            </p>
-                            <p>
-                                <label for="id_instructions">{{ menu.form.instructions.label }} <span class="errors">{% for error in menu.form.instructions.errors %} {{ error }} {% endfor %}</span></label>
-                                {{ menu.form.instructions }}
-                            </p>
-                            <div class="buttons">
-                                <button type="submit" class="green thinandtall">
-                                    <div><span>Place Order</span></div>
-                                </button>
-                            </div>
-                        </form>
-
+                            </form>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             {% endif %}

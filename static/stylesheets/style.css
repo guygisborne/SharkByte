@@ -2,7 +2,7 @@
 body { background:#eee; font:normal 0.625em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; }
 strong { font-weight:bold; }
 em { font-style:italic; }
-h1 { font:bold 1.8em/1em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; margin-bottom:10px; }
+h1 { font:bold 1.8em/1em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; }
 h2 { font:bold 1.6em/1.6em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:capitalize; margin-bottom:10px; }
 h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
 
@@ -28,8 +28,10 @@ h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial;
 .menu {}
     .menu:last-child { border-bottom:none; }
     .menu .expiration { display:none; }
-    .menu.expired form { opacity:0.6; }
+    .menu .end_time { float:right; color:#bcbcbc; font-weight:normal; text-transform:lowercase; }
+    .menu.expired form {}
     .menu.expired .expiration { display:inline; }
+    .menu.expired .end_time { display:none; }
     .ordered { background:#eee; padding:8px 12px; border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px; }
     .ordered .buttons button div { background-color:#eee; }
     .ordered .buttons button span { background-color:#eee; }
@@ -47,7 +49,7 @@ h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial;
 
 form { display:block; }
     form p { display:block; margin-bottom:10px !important; }
-    label { display:block; margin-bottom:2px; color:#666; }
+    label { display:block; width:337px; margin-bottom:2px; color:#666; }
     label span.help_text { float:right; color:#888; }
     label span.errors { float:right; color:#DF1B1B; }
     label span.value { display:block; margin-left:2em; }
@@ -56,7 +58,7 @@ form { display:block; }
     textarea { width:400px; height:5em; }
     select { width:319px; }
 
-    .radio label { cursor:pointer; font-size:1.2em; line-height:1.667em; color:#333; margin-bottom:8px; }
+    .radio label { cursor:pointer; font-size:1.2em; line-height:1.667em; color:#333; margin-bottom:8px; width:auto; }
     .radio input { width:auto; float:left; margin-top:5px; margin-right:8px; }
 
 
@@ -67,7 +69,7 @@ form { display:block; }
 #full_page { position:absolute; background:#fff; top:0; bottom:0; left:0; right:0; }
 
 #controls { padding:12px 20px; overflow:auto; }
-    #controls h1 { margin-top:8px; margin-bottom:0; }
+    #controls h1 { margin-top:8px; }
     #controls .hidden { display:none; }
     #controls .right { float:right; }
 

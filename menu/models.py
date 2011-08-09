@@ -59,11 +59,12 @@ class Meal(models.Model):
 	name = models.CharField(max_length=255)
 	description = models.TextField()
 
-	def getFieldName(self, menu):
+	def getFieldName(self, menu=None):
 		return '{0} - {1}'.format(self.name, self.description)
 
 	def __unicode__(self):
 		return self.name
+
 
 def tryGetMenu(type, publish_date):
 	try:
@@ -87,17 +88,20 @@ class MenuManager(models.Manager):
 		for i in xrange(count):
 			curdate = start_date - timedelta(days=i)
 			datename = date_filter(curdate, 'F j, Y')
+			empty = True
 			menus = []
+
 			for type, typename in MENU_TYPES:
 				menu = tryGetMenu(type, curdate)
 				if menu:
+					empty = False
 					menus.append({
 						  'menu': menu
 						, 'placed_count': menu.getOrdersWithState('p')
 						, 'confirmed_count': menu.getOrdersWithState('c') 
 						, 'unfulfilled_count': menu.getOrdersWithState('c') - menu.getOrdersWithState('f')
 					})
-			days.append({ 'datename': datename, 'menus': menus })
+			days.append({ 'datename': datename, 'menus': menus, 'empty': empty })
 		return days
 
 

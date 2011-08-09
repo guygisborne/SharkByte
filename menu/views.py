@@ -15,14 +15,14 @@ from employee.models import *
 @employee_required
 def todays_menu(request, prev_form=None, **kwargs):
 	menus = Menu.managed.todaysMenus(kwargs['employee'])
-	for menu in menus:
-		if menu['menu']:
-			if prev_form and prev_form.target_menu == menu['menu']:
-				menu['form'] = prev_form
+	for menu_info in menus:
+		if menu_info['menu']:
+			if prev_form and prev_form.target_menu == menu_info['menu']:
+				menu_info['form'] = prev_form
 			else:
-				menu['form'] = OrderForm(menu['menu'])
+				menu_info['form'] = OrderForm(menu_info['menu'])
 		else:
-			menu['form'] = False
+			menu_info['form'] = False
 	return render_to_response('todays_menu.html', { 'menus': menus }, context_instance=RequestContext(request))
 
 @employee_required
