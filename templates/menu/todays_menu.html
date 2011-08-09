@@ -26,14 +26,18 @@
                         {% if menu_info.order %}
                             <div class="ordered">
                                 <h3>
-                                    {% if menu_info.order.state == 'c' %}
-                                        <h3>Order confirmed</h3>
-                                    {% else %}
+                                    {% if menu_info.order.state == 'p' %}
                                         <h3>Order placed</h3>
+                                    {% else %}
+                                        {% if menu_info.order.state == 'c' %}
+                                            <h3>Order confirmed</h3>
+                                        {% else %}
+                                            <h3>Order fulfilled</h3>
+                                        {% endif %}
                                     {% endif %}
                                 </h3>
                                 {% if menu_info.order.state == 'c' %}
-                                    <p>Your order has been marked as <em>confirmed</em> and has been queued up for preparation.</p>
+                                    <p>Your order has been marked as <em>confirmed</em> and is queued up for preparation.</p>
                                 {% endif %}
                                 <p>
                                     <strong>You ordered:</strong><br/>

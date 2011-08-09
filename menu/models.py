@@ -13,8 +13,8 @@ MENU_TYPES = (
 )
 
 ORDER_STATE = (
-	  ('p', 'placed')
-	, ('c', 'confirmed')
+	  ('c', 'confirmed')
+	, ('p', 'placed')
 	, ('f', 'fulfilled')
 )
 
@@ -98,8 +98,8 @@ class MenuManager(models.Manager):
 					menus.append({
 						  'menu': menu
 						, 'placed_count': menu.getOrdersWithState('p')
-						, 'confirmed_count': menu.getOrdersWithState('c') 
-						, 'unfulfilled_count': menu.getOrdersWithState('c') - menu.getOrdersWithState('f')
+						, 'confirmed_count': menu.getOrdersWithState('c') + menu.getOrdersWithState('f')
+						, 'unfulfilled_count': menu.getOrdersWithState('c')
 					})
 			days.append({ 'datename': datename, 'menus': menus, 'empty': empty })
 		return days

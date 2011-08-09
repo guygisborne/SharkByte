@@ -8,6 +8,8 @@
 
     <div id="controls">
         <div class="right">
+            <div class="notice">
+            </div>
             <div class="buttons">
                 <button class="green thinandtall hidden">
                     <div><span></span></div>
@@ -19,6 +21,11 @@
         </div>
 
         <h1>{{ menu.publish_date }} > {{ menu }} Orders</h1>
+
+        <div class="nav">
+            <a href="{% url menu_list %}">Menu List</a>
+            <a href="{% url admin:index %}">Admin Panel</a>
+        </div>
     </div>
 
     <div class="order labels">
@@ -39,5 +46,6 @@
 {% endblock %}
 
 {% block scripts %}
+    <script type="text/javascript" src="/static/javascripts/csrf.js"></script>
     <script type="text/javascript" src="/static/javascripts/admin.js"></script>
 {% endblock %}

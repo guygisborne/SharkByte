@@ -94,7 +94,8 @@ def order_from_id(order_id):
 		return False
 	
 def change_order_state(order):
-	order.state = 'f'
-	order.save()
+	if order.state != 'f':
+		order.state = 'f'
+		order.save()
 	return order.pk
 
