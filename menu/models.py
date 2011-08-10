@@ -83,7 +83,8 @@ class MenuManager(models.Manager):
 		for type, typename in MENU_TYPES:
 			menu = tryGetMenu(type, date.today())
 			order = (menu.getOrderFor(employee) if menu else False)
-			todays_menus.append({ 'typename': typename.capitalize(), 'menu': menu, 'order': order }) 	
+			stats = menu.getStats()
+			todays_menus.append({ 'typename': typename.capitalize(), 'menu': menu, 'order': order, 'stats': stats }) 	
 		return todays_menus
 
 	def pastMenus(self, start_date=datetime.today(), count=15):
@@ -155,6 +156,18 @@ class Menu(models.Model):
 				orders.extend(order)
 		return orders
 
+	def getStats(self):
+		from menu.models import Order
+		try: first_order = Order.objects.filter(menu=self).order_by('confirm_time')[0]
+		except IndexError: first_order = False
+		empty = True
+		meals = []
+		for meal in self.meals.all():
+			empty = False
+			order_count = len(Order.objects.filter(menu=self, meal=meal))
+			meals.append({ 'meal': meal, 'order_count': order_count })
+		return { 'meals': False if empty else meals, 'first_order': first_order }
+
 	def getTimeuntilEnd(self):
 		return timeuntil(datetime.combine(date.today(), self.end_time))
 
@@ -192,6 +205,11 @@ class Order(models.Model):
 
 	def isConfirmable(self):
 		return self.getConfirmableTime() < datetime.now()
+
+	def timesinceConfirmString(self):
+		start = self.getConfirmableTime()
+		end = self.confirm_time
+		return end - start
 
 	def confirm(self):
 		if self.isConfirmable():

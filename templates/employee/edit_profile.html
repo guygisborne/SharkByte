@@ -9,10 +9,6 @@
         <form method="post" class="profile" action="{% url employee.views.save_profile %}">
             {% csrf_token %}   
             <p>
-                <label for="id_full_name">Full Name <span class="errors">{% for error in employee_form.full_name.errors %} {{ error }} {% endfor %}</span></label>
-                {{ employee_form.full_name }}
-            </p>
-            <p>
                 <label for="id_allergies">List of Allergies <span class="errors">{% for error in employee_form.allergies.errors %} {{ error }} {% endfor %}</span></label>
                 {{ employee_form.allergies }}
             </p>

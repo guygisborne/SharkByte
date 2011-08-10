@@ -21,7 +21,28 @@
                     <p>A {{ menu_info.typename }} menu will be published at <strong>{{ menu_info.menu.publish_time }}</strong> today.</p>
                 {% else %}
                     {% if menu_info.menu.isExpired %}
-                        <p>{{ menu_info.typename }} ended at <strong>{{ menu_info.menu.endTimeString }}</strong> today. You missed out on {{ menu_info.menu.meals }}</p>
+                        <p>{{ menu_info.typename }} ended at <strong>{{ menu_info.menu.endTimeString }}</strong> today.
+                        {% if menu_info.stats %}
+                            View some <a class="open_quick_stats" href="">quick stats</a>?</p>
+
+                            <div class="quick_stats">
+                                <p>
+                                    <strong>Orders:</strong><br/>
+                                    {% for meal_info in menu_info.stats.meals %}
+                                        {{ meal_info.order_count }} order{{ meal_info.order_count|pluralize:"s" }} for <em>{{ meal_info.meal }}</em>
+                                        {% if not forloop.last %}<br/>{% endif %}
+                                    {% endfor %}
+                                </p>
+                                {% if menu_info.stats.first_order %}
+                                    <p>
+                                        <strong>Trigger Finger:</strong><br/>
+                                        {{ menu_info.stats.first_order.employee }} ordered first
+                                    </p>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            </p>
+                        {% endif %}
                     {% else %}
                         {% if menu_info.order %}
                             <div class="ordered">

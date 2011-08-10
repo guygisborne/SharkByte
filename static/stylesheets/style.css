@@ -36,6 +36,10 @@ h3 { font:normal 1.4em/1.5em 'Trebuchet MS', Helvetica, 'Helvetica Neue', Arial;
     .ordered .buttons button div { background-color:#eee; }
     .ordered .buttons button span { background-color:#eee; }
 
+.quick_stats { display:none; }
+.open_quick_stats { color:#6a8e80; }
+.open_quick_stats:hover { text-decoration:none; }
+
 form { display:block; }
     form p { display:block; margin-bottom:10px !important; }
     label { display:block; width:337px; margin-bottom:2px; color:#666; }

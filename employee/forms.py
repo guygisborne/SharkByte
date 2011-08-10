@@ -23,4 +23,5 @@ class LoginForm(forms.Form):
 class EditEmployeeForm(ModelForm):
 	class Meta:
 		model = Employee
+		exclude = ['full_name']
 
