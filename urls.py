@@ -9,6 +9,7 @@ urlpatterns = patterns('',
 	, (r'^admin/doc/', include('django.contrib.admindocs.urls'))
 	, (r'^', include('employee.urls'))
 	, (r'^menu/', include('menu.urls'))
+	, (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', { 'url': '/static/images/favicon.ico' }),
 )
 
 if settings.LOCAL:

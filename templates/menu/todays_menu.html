@@ -12,7 +12,7 @@
 
     {% for menu_info in menus %}
         <div class="menu inner division {% if menu_info.menu.isExpired %}expired{% endif %}">
-            <h2>{{ menu_info.typename }} <span class="expiration">has ended</span> <span class="end_time">Ends at {{ menu_info.menu.end_time }}</span></h2>
+            <h2>{{ menu_info.typename }} <span class="expiration">has ended</span> {% if menu_info.menu %}<span class="end_time">Ends at {{ menu_info.menu.endTimeString }}</span>{% endif %}</h2>
 
             {% if not menu_info.menu %}
                 <p>A {{ menu_info.typename }} menu has yet to be posted.</p>
@@ -21,7 +21,7 @@
                     <p>A {{ menu_info.typename }} menu will be published at <strong>{{ menu_info.menu.publish_time }}</strong> today.</p>
                 {% else %}
                     {% if menu_info.menu.isExpired %}
-                        <p>{{ menu_info.typename }} ended at <strong>{{ menu_info.menu.end_time }}</strong> today. You missed out on {{ menu_info.menu.meals }}</p>
+                        <p>{{ menu_info.typename }} ended at <strong>{{ menu_info.menu.endTimeString }}</strong> today. You missed out on {{ menu_info.menu.meals }}</p>
                     {% else %}
                         {% if menu_info.order %}
                             <div class="ordered">

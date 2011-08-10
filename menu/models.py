@@ -21,6 +21,9 @@ ORDER_STATE = (
 
 CONFIRM_DELTA = 20
 
+def relative_time(time):
+	return datetime.combine(date.today(), time)
+
 class Timeslot(models.Model):
 	time = models.TimeField(help_text='Must be in <strong>HH:MM</strong> format; for example, 6:30 p.m. would be written as 18:30.')  
 	capacity = models.PositiveIntegerField(blank=True, null=True, help_text='An optional limit of employees this timeslot can serve; leave blank to serve an unlimited number of employees.') 
@@ -35,8 +38,7 @@ class Timeslot(models.Model):
 		return (self.availableCountFor(menu) > 0 if self.capacity != None else True)
 
 	def getFormattedTime(self):
-		relative_time = datetime.combine(date.today(), self.time)
-		return date_filter(relative_time, 'g:i a')
+		return date_filter(relative_time(self.time), 'g:i a')
 
 	def getFieldName(self, menu):
 		field_name = self.getFormattedTime()
@@ -96,11 +98,14 @@ class MenuManager(models.Manager):
 				menu = tryGetMenu(type, curdate)
 				if menu:
 					empty = False
+					unfulfilled_count = menu.getOrdersWithState('c')
+					confirmed_count = menu.getOrdersWithState('f') + unfulfilled_count
+					placed_count = menu.getOrdersWithState('p') + confirmed_count
 					menus.append({
 						  'menu': menu
-						, 'placed_count': menu.getOrdersWithState('p')
-						, 'confirmed_count': menu.getOrdersWithState('c') + menu.getOrdersWithState('f')
-						, 'unfulfilled_count': menu.getOrdersWithState('c')
+						, 'placed_count': placed_count
+						, 'confirmed_count': confirmed_count
+						, 'unfulfilled_count': unfulfilled_count
 					})
 			days.append({ 'datename': datename, 'menus': menus, 'empty': empty })
 		return days
@@ -153,6 +158,9 @@ class Menu(models.Model):
 	def getTimeuntilEnd(self):
 		return timeuntil(datetime.combine(date.today(), self.end_time))
 
+	def endTimeString(self):
+		return date_filter(relative_time(self.end_time), 'g:i a')
+
 	def isExpired(self):
 		return self.end_time < datetime.time(datetime.now())
 
@@ -177,8 +185,7 @@ class Order(models.Model):
 	confirm_time = models.DateTimeField(blank=True, null=True, editable=False)
 
 	def getConfirmableTime(self):
-		relative_time = datetime.combine(date.today(), self.timeslot.time)
-		return relative_time - timedelta(minutes=CONFIRM_DELTA)
+		return relative_time(self.timeslot.time) - timedelta(minutes=CONFIRM_DELTA)
 
 	def confirmableTimeString(self):
 		return date_filter(self.getConfirmableTime(), 'g:i a')
