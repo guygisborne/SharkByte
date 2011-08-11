@@ -74,9 +74,9 @@ function requestOrders() {
         }
     });
 
-    // pending_request = setTimeout(function() { 
-    //     requestOrders.call();
-    // }, REQUEST_INTERVAL);
+    pending_request = setTimeout(function() { 
+        requestOrders.call();
+    }, REQUEST_INTERVAL);
 }
 
 function fulfillOrders(order_ids) {

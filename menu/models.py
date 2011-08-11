@@ -83,7 +83,7 @@ class MenuManager(models.Manager):
 		for type, typename in MENU_TYPES:
 			menu = tryGetMenu(type, date.today())
 			order = (menu.getOrderFor(employee) if menu else False)
-			stats = menu.getStats()
+			stats = (menu.getStats() if menu else False)
 			todays_menus.append({ 'typename': typename.capitalize(), 'menu': menu, 'order': order, 'stats': stats }) 	
 		return todays_menus
 
